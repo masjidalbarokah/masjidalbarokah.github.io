@@ -6,6 +6,7 @@
   <title>Masjid Al-Barokah</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 </head>
 <body>
 
@@ -99,30 +100,37 @@
     <div class="progress-bar" style="width: 60%;">60%</div>
   </div>
 
-  <a href="https://wa.me/628xxxxxx" class="btn">Konfirmasi Donasi</a>
+  <a href="https://wa.me/6283821110706" class="btn">Konfirmasi Donasi</a>
 </section>
 
- <!-- Galeri -->
-<section id="gallery" class="section">
-  <h2>Galeri Masjid</h2>
-  <div class="gallery">
-    <div class="gallery-item">
-      <img src="assets/Gambar WhatsApp 2025-09-18 pukul 19.57.41_15a51e7a.jpg" alt="Foto Masjid">
-      <h3>Renovasi Atap</h3>
-      <p>Proses renovasi atap masjid untuk meningkatkan kenyamanan jamaah.</p>
+  <!-- Galeri -->
+  <section id="gallery" class="section">
+    <h2>Galeri Masjid</h2>
+    <div class="swiper myGallery">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide gallery-item">
+          <img src="assets/Gambar WhatsApp 2025-09-18 pukul 19.57.41_15a51e7a.jpg" alt="Foto Masjid">
+          <h3>Renovasi Atap</h3>
+          <p>Proses renovasi atap masjid untuk meningkatkan kenyamanan jamaah.</p>
+        </div>
+        <div class="swiper-slide gallery-item">
+          <img src="assets/Gambar WhatsApp 2025-09-18 pukul 19.57.41_15a51e7a.jpg" alt="Foto Masjid">
+          <h3>Kajian Mingguan</h3>
+          <p>Kajian rutin bersama ustadz setiap malam Jumat ba’da Isya.</p>
+        </div>
+        <div class="swiper-slide gallery-item">
+          <img src="assetsGambar WhatsApp 2025-09-18 pukul 19.57.41_15a51e7a.jpg" alt="Foto Masjid">
+          <h3>TPA Anak</h3>
+          <p>Kegiatan belajar Al-Qur’an untuk anak-anak setiap sore.</p>
+        </div>
+      </div>
+      <!-- Tombol Navigasi -->
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <!-- Pagination Bullets -->
+      <div class="swiper-pagination"></div>
     </div>
-    <div class="gallery-item">
-      <img src="assets/Gambar WhatsApp 2025-09-18 pukul 19.57.41_15a51e7a.jpg" alt="Foto Masjid">
-      <h3>Kajian Mingguan</h3>
-      <p>Kajian rutin bersama ustadz setiap malam Jumat ba’da Isya.</p>
-    </div>
-    <div class="gallery-item">
-      <img src="assets/Gambar WhatsApp 2025-09-18 pukul 19.57.41_15a51e7a.jpg" alt="Foto Masjid">
-      <h3>TPA Anak</h3>
-      <p>Kegiatan belajar Al-Qur’an untuk anak-anak setiap sore.</p>
-    </div>
-  </div>
-</section>
+  </section>
 
 
   <!-- Kontak -->
@@ -138,6 +146,7 @@
     <p>&copy; 2025 Masjid Al-Barokah. Semua Hak Dilindungi.</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
