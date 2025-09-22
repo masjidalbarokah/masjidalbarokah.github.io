@@ -1,25 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Teks mengetik
+  // Efek mengetik berulang
   new Typed("#typed-text", {
-    strings: ["Pusat Ibadah, Dakwah, dan Ukhuwah Umat"],
+    strings: [
+      "Pusat Ibadah, Dakwah, dan Ukhuwah Umat",
+      "Tempat Silaturahmi Jamaah",
+      "Membangun Generasi Qur'ani"
+    ],
     typeSpeed: 60,
     backSpeed: 40,
-    loop: false,
+    backDelay: 1500, // jeda sebelum menghapus
+    loop: true,
     showCursor: true,
     cursorChar: "|"
   });
 
-  // Swiper gallery init (biarin yang tadi)
-  new Swiper(".myGallery", {
-    slidesPerView: 1.2,
-    spaceBetween: 20,
-    loop: true,
-    centeredSlides: true,
-    pagination: { el: ".swiper-pagination", clickable: true },
-    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
-    breakpoints: { 768: { slidesPerView: 1.5 }, 1024: { slidesPerView: 2.5 } }
-  });
-});
 
 // Init Swiper untuk Galeri
 document.addEventListener("DOMContentLoaded", () => {
