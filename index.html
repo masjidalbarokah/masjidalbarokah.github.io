@@ -107,7 +107,29 @@
     <div class="progress-bar" id="progress-bar">0%</div>
   </div>
 
-  <a href="https://wa.me/628xxxxxx" class="btn">Konfirmasi Donasi</a>
+ <!-- Tombol Konfirmasi -->
+<a href="#" class="btn" id="openModal">Konfirmasi Donasi</a>
+
+<!-- Modal -->
+<div id="donasiModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Konfirmasi Donasi</h3>
+    <form id="donasiForm">
+      <label>Nama Donatur</label>
+      <input type="text" name="nama" required>
+
+      <label>Jumlah Nominal (Rp)</label>
+      <input type="number" name="nominal" required>
+
+      <label>Upload Bukti (opsional)</label>
+      <input type="file" name="bukti" accept="image/*">
+
+      <button type="submit" class="btn">Laporkan</button>
+    </form>
+  </div>
+</div>
+
 </section>
 
   <!-- Galeri -->
