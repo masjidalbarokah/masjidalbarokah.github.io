@@ -14,28 +14,30 @@ const SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbxn8PH3K5YU2F6Tg-Nv5NE94-rbu-ghaEedVKzcf7ucA3BiV3m7iH8rzESXtWMfObs/exec";
 
 // ================== Submit Form Donasi ==================
-document
-  .getElementById("donasiForm")
-  .addEventListener("submit", async (e) => {
-    e.preventDefault();
+document.getElementById("donasiForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    const nama = e.target.nama.value;
-    const nominal = e.target.nominal.value;
-    const file = e.target.bukti.files[0];
+  const submitBtn = e.target.querySelector("button[type=submit]");
+  submitBtn.disabled = true;             // matikan tombol biar gak dobel klik
+  submitBtn.innerText = "Mengirim...";   // ubah teks biar user paham
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        console.log("📸 Base64 berhasil dibaca, panjang:", reader.result.length);
-        await submitDonasi(nama, nominal, reader.result); // kirim base64
-      };
-      reader.readAsDataURL(file);
-    } else {
-      await submitDonasi(nama, nominal, "");
-    }
-  });
+  const nama = e.target.nama.value;
+  const nominal = e.target.nominal.value;
+  const file = e.target.bukti.files[0];
 
-async function submitDonasi(nama, nominal, bukti) {
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      console.log("📸 Base64 terbaca, panjang:", reader.result.length);
+      await submitDonasi(nama, nominal, reader.result, submitBtn);
+    };
+    reader.readAsDataURL(file);
+  } else {
+    await submitDonasi(nama, nominal, "", submitBtn);
+  }
+});
+
+async function submitDonasi(nama, nominal, bukti, submitBtn) {
   try {
     const payload = new URLSearchParams({ nama, nominal, bukti });
 
@@ -59,6 +61,10 @@ async function submitDonasi(nama, nominal, bukti) {
   } catch (err) {
     console.error("❌ Error kirim data:", err);
     alert("❌ Gagal mengirim data.");
+  } finally {
+    // aktifkan kembali tombol setelah proses selesai
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Laporkan";
   }
 }
 
@@ -82,7 +88,6 @@ async function loadTotalDonasi() {
 }
 
 document.addEventListener("DOMContentLoaded", loadTotalDonasi);
-
 
 
 
