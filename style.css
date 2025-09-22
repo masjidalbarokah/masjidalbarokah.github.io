@@ -180,7 +180,7 @@ nav ul li a { color: white; font-weight: 500; }
 /* PROGRESS BAR */
 .progress {
   background: #ddd; border-radius: 10px;
-  overflow: hidden; margin: 10px auto; width: 90%;
+  overflow: hidden; margin: 10px auto; width: 95%;
 }
 .progress-bar {
   background: #2e7d32; color: white; padding: 2px;
@@ -259,7 +259,7 @@ nav ul li a { color: white; font-weight: 500; }
 }
 
 /* Mode stacked untuk layar kecil */
-@media (max-width: 600px) {
+@media (max-width: 100px) {
   #donasiTable, #donasiTable thead, #donasiTable tbody, #donasiTable th, #donasiTable td, #donasiTable tr {
     display: block;
     width: 100%;
