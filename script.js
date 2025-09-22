@@ -1,9 +1,10 @@
 // Init Swiper untuk Galeri
 document.addEventListener("DOMContentLoaded", () => {
   new Swiper(".myGallery", {
-    slidesPerView: 1,
+    slidesPerView: 1.2, // 70% slide + sisanya keliatan
     spaceBetween: 20,
     loop: true,
+    centeredSlides: true,
     pagination: {
       el: ".swiper-pagination",
       clickable: true,
@@ -13,8 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
       prevEl: ".swiper-button-prev",
     },
     breakpoints: {
-      640: { slidesPerView: 2 },
-      1024: { slidesPerView: 3 }
+      768: { slidesPerView: 1.5 },   // tablet
+      1024: { slidesPerView: 2.5 }   // desktop
     }
   });
 });
