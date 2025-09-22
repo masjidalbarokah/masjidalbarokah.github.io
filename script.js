@@ -1,3 +1,28 @@
+// Simulasi data donasi (bisa diganti dari backend/PHP/DB)
+let totalTerkumpul = 45000000; // Rp 45 juta
+let targetDonasi   = 100000000; // Rp 100 juta
+
+function updateDonasi() {
+  const persen = Math.min((totalTerkumpul / targetDonasi) * 100, 100);
+
+  document.getElementById("donasi-terkumpul").innerHTML =
+    `<strong>Terkumpul:</strong> Rp ${totalTerkumpul.toLocaleString("id-ID")}`;
+
+  document.getElementById("donasi-target").innerHTML =
+    `<strong>Target:</strong> Rp ${targetDonasi.toLocaleString("id-ID")}`;
+
+  const bar = document.getElementById("progress-bar");
+  bar.style.width = persen + "%";
+  bar.innerText = Math.floor(persen) + "%";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateDonasi();
+});
+
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
   // Efek mengetik berulang
   new Typed("#typed-text", {
