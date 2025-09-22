@@ -159,6 +159,23 @@ nav ul li a { color: white; font-weight: 500; }
 .copy-btn:hover {
   background: #1b5e20;
 }
+.donasi-stats {
+  margin: 15px auto;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: #444;
+  font-weight: 600;
+}
+
+@media (max-width: 500px) {
+  .donasi-stats {
+    flex-direction: column;
+    text-align: center;
+    gap: 5px;
+  }
+}
 
 /* PROGRESS BAR */
 .progress {
