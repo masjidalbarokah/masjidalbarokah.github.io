@@ -89,7 +89,70 @@ async function loadTotalDonasi() {
 
 document.addEventListener("DOMContentLoaded", loadTotalDonasi);
 
+// RIWAYAT DONASI
+let currentPage = 1;
+const rowsPerPage = 5;
 
+async function loadDonasiTable() {
+  try {
+    const res = await fetch(SCRIPT_URL + "?action=getDonations");
+    const data = await res.json();
+    const donations = data.donations.reverse(); // terbaru di atas
+
+    renderTable(donations, currentPage, rowsPerPage);
+    renderPagination(donations.length, rowsPerPage);
+    
+    // Hitung total semua nominal
+    const total = donations.reduce((sum, d) => sum + Number(d.nominal || 0), 0);
+    document.getElementById("donasiTotal").innerText =
+      "Total Semua Donasi: Rp " + total.toLocaleString("id-ID");
+  } catch (err) {
+    console.error("⚠️ Gagal load riwayat:", err);
+  }
+}
+
+function renderTable(data, page, rows) {
+  const start = (page - 1) * rows;
+  const end = start + rows;
+  const paginatedItems = data.slice(start, end);
+
+  const tbody = document.querySelector("#donasiTable tbody");
+  tbody.innerHTML = "";
+
+  paginatedItems.forEach(d => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${new Date(d.tanggal).toLocaleString("id-ID")}</td>
+      <td>${d.nama}</td>
+      <td>Rp ${Number(d.nominal).toLocaleString("id-ID")}</td>
+      <td>${d.bukti ? `<a href="${d.bukti}" target="_blank">Lihat</a>` : "-"}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderPagination(totalItems, rows) {
+  const pageCount = Math.ceil(totalItems / rows);
+  const pagination = document.getElementById("pagination");
+  pagination.innerHTML = "";
+
+  for (let i = 1; i <= pageCount; i++) {
+    const btn = document.createElement("button");
+    btn.innerText = i;
+    btn.disabled = (i === currentPage);
+    btn.onclick = () => {
+      currentPage = i;
+      loadDonasiTable();
+    };
+    pagination.appendChild(btn);
+  }
+}
+
+// Load riwayat saat halaman dibuka
+document.addEventListener("DOMContentLoaded", () => {
+  loadTotalDonasi();
+  loadDonasiTable();
+});
 
 // Simulasi data donasi (bisa diganti dari backend/PHP/DB)
 let totalTerkumpul = 45000000; // Rp 45 juta
