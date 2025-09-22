@@ -97,10 +97,44 @@ nav ul li a { color: white; font-weight: 500; }
 /* GALLERY */
 .gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
-  gap: 15px; margin-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
 }
-.gallery img { border-radius: 10px; }
+
+.gallery-item {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-item h3 {
+  font-size: 1.2rem;
+  color: #2e7d32;
+  margin: 15px 15px 5px;
+}
+
+.gallery-item p {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0 15px 15px;
+  line-height: 1.4;
+}
 
 /* FOOTER */
 footer {
