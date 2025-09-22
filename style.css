@@ -6,7 +6,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* HERO */
 .hero {
-  background: url('assets/masjid-hero.jpg') center/cover no-repeat;
+  background: url('assets/masjid.jpg') center/cover no-repeat;
   height: 100vh;
   display: flex; flex-direction: column;
   justify-content: center; align-items: center;
