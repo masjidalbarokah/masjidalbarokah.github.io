@@ -13,32 +13,49 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypQVKsFBeDtbpHozDjE
 // Submit form donasi
 document.getElementById("donasiForm").addEventListener("submit", async (e) => {
   e.preventDefault();
+  const formData = new FormData(e.target);
 
-  const nama = e.target.nama.value;
-  const nominal = e.target.nominal.value;
-  const bukti = ""; // kosong dulu, bisa dikembangkan jadi upload file
+  const file = formData.get("bukti");
+  if (file && file.size > 0) {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      await submitDonasi({
+        nama: formData.get("nama"),
+        nominal: formData.get("nominal"),
+        bukti: reader.result
+      });
+    };
+    reader.readAsDataURL(file);
+  } else {
+    await submitDonasi({
+      nama: formData.get("nama"),
+      nominal: formData.get("nominal"),
+      bukti: ""
+    });
+  }
+});
 
+async function submitDonasi(data) {
   try {
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ nama, nominal, bukti })
+      body: new URLSearchParams(data)
     });
 
     const text = await res.text();
     if (text.includes("Success")) {
-      alert("✅ Terima kasih, donasi Anda berhasil dilaporkan!");
-      e.target.reset();
+      alert("✅ Donasi berhasil dilaporkan!");
+      document.getElementById("donasiForm").reset();
       modal.style.display = "none";
-      loadTotalDonasi(); // refresh total donasi realtime
+      loadTotalDonasi();
     } else {
       alert("⚠️ Gagal: " + text);
     }
   } catch (err) {
-    console.error("Error:", err);
+    console.error(err);
     alert("❌ Gagal mengirim data.");
   }
-});
+}
 
 // Ambil total donasi realtime dari Google Sheet
 async function loadTotalDonasi() {
