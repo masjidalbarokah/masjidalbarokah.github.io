@@ -11,7 +11,7 @@ window.onclick = (e) => {
 
 // ================== Config ==================
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxdx8WyiElKgnCOGv4Dbm4v2ZyJUaytLkyP6QBbjqv4BJqmqd2JFMU2n7Rpl62Fy3Jn/exec";
+  "https://script.google.com/macros/s/AKfycbx1cQVoW7ZDKpNRoW4sN_POpefDE5qTlYt8MRiso-swMZgyEc1LW0z26fS3QvYrgJO7/exec";
 
 // ================== Submit Form Donasi ==================
 document.getElementById("donasiForm").addEventListener("submit", async (e) => {
