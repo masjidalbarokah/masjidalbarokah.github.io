@@ -1,3 +1,10 @@
+function copyRekening() {
+  const rekening = document.getElementById("rekening").innerText;
+  navigator.clipboard.writeText(rekening).then(() => {
+    alert("Nomor rekening berhasil dicopy: " + rekening);
+  });
+}
+
 // Jadwal sholat auto-detect lokasi (yang udah gua kasih kemarin tetap ada)
 
 // Toggle mobile menu
