@@ -14,6 +14,17 @@ document.addEventListener("DOMContentLoaded", () => {
     cursorChar: "|"
   });
 
+  // Swiper gallery init
+  new Swiper(".myGallery", {
+    slidesPerView: 1.2,
+    spaceBetween: 20,
+    loop: true,
+    centeredSlides: true,
+    pagination: { el: ".swiper-pagination", clickable: true },
+    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+    breakpoints: { 768: { slidesPerView: 1.5 }, 1024: { slidesPerView: 2.5 } }
+  });
+});
 
 // Init Swiper untuk Galeri
 document.addEventListener("DOMContentLoaded", () => {
