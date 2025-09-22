@@ -234,6 +234,63 @@ nav ul li a { color: white; font-weight: 500; }
   cursor: not-allowed;
 }
 
+/* Wrapper supaya tabel bisa discroll horizontal */
+#donasiTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  min-width: 600px; /* biar di desktop rapih */
+}
+
+#donasiTable th, #donasiTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+#donasiTable th {
+  background: #2e7d32;
+  color: white;
+}
+
+/* Responsive: bungkus tabel dalam div */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Mode stacked untuk layar kecil */
+@media (max-width: 600px) {
+  #donasiTable, #donasiTable thead, #donasiTable tbody, #donasiTable th, #donasiTable td, #donasiTable tr {
+    display: block;
+    width: 100%;
+  }
+
+  #donasiTable tr {
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+    padding: 10px;
+  }
+
+  #donasiTable td {
+    text-align: left;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  #donasiTable td::before {
+    position: absolute;
+    left: 10px;
+    width: 45%;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #333;
+  }
+
+  #donasiTable td:nth-of-type(1)::before { content: "Tanggal"; }
+  #donasiTable td:nth-of-type(2)::before { content: "Nama"; }
+  #donasiTable td:nth-of-type(3)::before { content: "Nominal"; }
+  #donasiTable td:nth-of-type(4)::before { content: "Bukti"; }
+}
 
 /* GALERY SLIDER */
 .myGallery {
