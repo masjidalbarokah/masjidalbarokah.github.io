@@ -1,3 +1,67 @@
+// Modal logic
+const modal = document.getElementById("donasiModal");
+const openModal = document.getElementById("openModal");
+const closeModal = document.querySelector(".close");
+
+openModal.onclick = () => modal.style.display = "flex";
+closeModal.onclick = () => modal.style.display = "none";
+window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+
+// Kirim data ke Google Sheet
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypQVKsFBeDtbpHozDjE9RDYoApy4GLKk80bOaNS5dlDCgXYWG4-TMiF8ZFnLGp31_a/exec"; // ganti dengan URL Web App Google Apps Script
+
+document.getElementById("donasiForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  // Convert file bukti ke base64 (optional)
+  const file = formData.get("bukti");
+  if (file && file.size > 0) {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      formData.set("bukti", reader.result);
+      await submitDonasi(formData);
+    };
+    reader.readAsDataURL(file);
+  } else {
+    await submitDonasi(formData);
+  }
+});
+
+async function submitDonasi(formData) {
+  try {
+    await fetch(SCRIPT_URL, { method: "POST", body: formData });
+    alert("Terima kasih, donasi Anda berhasil dilaporkan!");
+    document.getElementById("donasiForm").reset();
+    modal.style.display = "none";
+    loadTotalDonasi(); // refresh total donasi realtime
+  } catch (err) {
+    console.error("Error:", err);
+    alert("Gagal mengirim data.");
+  }
+}
+
+// Ambil total donasi realtime dari Google Sheet
+async function loadTotalDonasi() {
+  try {
+    const res = await fetch(SCRIPT_URL + "?action=getTotal");
+    const data = await res.json();
+    const total = data.total || 0;
+    document.getElementById("donasi-terkumpul").innerHTML =
+      `<strong>Terkumpul:</strong> Rp ${total.toLocaleString("id-ID")}`;
+
+    const persen = Math.min((total / targetDonasi) * 100, 100);
+    const bar = document.getElementById("progress-bar");
+    bar.style.width = persen + "%";
+    bar.innerText = Math.floor(persen) + "%";
+  } catch (err) {
+    console.error("Gagal ambil total donasi:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadTotalDonasi);
+
+
 // Simulasi data donasi (bisa diganti dari backend/PHP/DB)
 let totalTerkumpul = 45000000; // Rp 45 juta
 let targetDonasi   = 100000000; // Rp 100 juta
