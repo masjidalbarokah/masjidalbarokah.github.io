@@ -222,6 +222,74 @@ nav ul li a { color: white; font-weight: 500; }
   background: #2e7d32;
 }
 
+/* KONTAK */
+.kontak-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: start;
+  margin-top: 30px;
+}
+
+.kontak-info {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+.kontak-info h3 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  color: #2e7d32;
+}
+
+.kontak-info p {
+  font-size: 0.95rem;
+  margin: 10px 0;
+  color: #444;
+}
+
+.kontak-info a {
+  color: #2e7d32;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.kontak-info a:hover {
+  text-decoration: underline;
+}
+
+.btn-whatsapp {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #25D366;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebe5d;
+}
+
+.kontak-map iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .kontak-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* FOOTER */
 footer {
