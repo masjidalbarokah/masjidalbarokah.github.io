@@ -1,3 +1,15 @@
+// Jadwal sholat auto-detect lokasi (yang udah gua kasih kemarin tetap ada)
+
+// Toggle mobile menu
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.querySelector(".menu-toggle");
+  const navMenu = document.querySelector("nav ul");
+
+  toggle.addEventListener("click", () => {
+    navMenu.classList.toggle("show");
+  });
+});
+
 // ID kota dari API MyQuran, contoh: 1407 = Indramayu
 const KOTA_ID = 1209;
 
