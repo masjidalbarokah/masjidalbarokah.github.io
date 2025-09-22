@@ -1,5 +1,5 @@
 // ID kota dari API MyQuran, contoh: 1407 = Indramayu
-const KOTA_ID = 1407;
+const KOTA_ID = 1209;
 
 async function loadJadwalSholat() {
   try {
