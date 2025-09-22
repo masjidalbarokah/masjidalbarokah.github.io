@@ -1,48 +1,53 @@
-// Modal logic
+// ================== Modal Logic ==================
 const modal = document.getElementById("donasiModal");
 const openModal = document.getElementById("openModal");
 const closeModal = document.querySelector(".close");
 
-openModal.onclick = () => modal.style.display = "flex";
-closeModal.onclick = () => modal.style.display = "none";
-window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+openModal.onclick = () => (modal.style.display = "flex");
+closeModal.onclick = () => (modal.style.display = "none");
+window.onclick = (e) => {
+  if (e.target == modal) modal.style.display = "none";
+};
 
-// URL Google Apps Script
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypQVKsFBeDtbpHozDjE9RDYoApy4GLKk80bOaNS5dlDCgXYWG4-TMiF8ZFnLGp31_a/exec";
+// ================== Config ==================
+const SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbypQVKsFBeDtbpHozDjE9RDYoApy4GLKk80bOaNS5dlDCgXYWG4-TMiF8ZFnLGp31_a/exec";
 
-// Submit form donasi
-document.getElementById("donasiForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
+// ================== Submit Form Donasi ==================
+document
+  .getElementById("donasiForm")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const file = formData.get("bukti");
-  if (file && file.size > 0) {
-    const reader = new FileReader();
-    reader.onload = async () => {
-      await submitDonasi({
-        nama: formData.get("nama"),
-        nominal: formData.get("nominal"),
-        bukti: reader.result
-      });
-    };
-    reader.readAsDataURL(file);
-  } else {
-    await submitDonasi({
-      nama: formData.get("nama"),
-      nominal: formData.get("nominal"),
-      bukti: ""
-    });
-  }
-});
+    const nama = e.target.nama.value;
+    const nominal = e.target.nominal.value;
+    const file = e.target.bukti.files[0];
 
-async function submitDonasi(data) {
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        console.log("📸 Base64 berhasil dibaca, panjang:", reader.result.length);
+        await submitDonasi(nama, nominal, reader.result); // kirim base64
+      };
+      reader.readAsDataURL(file);
+    } else {
+      await submitDonasi(nama, nominal, "");
+    }
+  });
+
+async function submitDonasi(nama, nominal, bukti) {
   try {
+    const payload = new URLSearchParams({ nama, nominal, bukti });
+
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
-      body: new URLSearchParams(data)
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: payload,
     });
 
     const text = await res.text();
+    console.log("📤 Respon server:", text);
+
     if (text.includes("Success")) {
       alert("✅ Donasi berhasil dilaporkan!");
       document.getElementById("donasiForm").reset();
@@ -52,12 +57,12 @@ async function submitDonasi(data) {
       alert("⚠️ Gagal: " + text);
     }
   } catch (err) {
-    console.error(err);
+    console.error("❌ Error kirim data:", err);
     alert("❌ Gagal mengirim data.");
   }
 }
 
-// Ambil total donasi realtime dari Google Sheet
+// ================== Ambil Total Donasi Realtime ==================
 async function loadTotalDonasi() {
   try {
     const res = await fetch(SCRIPT_URL + "?action=getTotal");
@@ -72,11 +77,12 @@ async function loadTotalDonasi() {
     bar.style.width = persen + "%";
     bar.innerText = Math.floor(persen) + "%";
   } catch (err) {
-    console.error("Gagal ambil total donasi:", err);
+    console.error("⚠️ Gagal ambil total donasi:", err);
   }
 }
 
 document.addEventListener("DOMContentLoaded", loadTotalDonasi);
+
 
 
 
