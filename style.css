@@ -419,3 +419,15 @@ footer {
   text-align: center; padding: 20px; margin-top: 40px;
   font-size: 0.9rem;
 }
+.donasi-warning {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  border-radius: 8px;
+  padding: 12px 15px;
+  margin: 15px 0;
+  font-size: 15px;
+  line-height: 1.6;
+  box-shadow: 0 0 5px rgba(255, 193, 7, 0.4);
+}
+
