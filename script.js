@@ -155,8 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Simulasi data donasi (bisa diganti dari backend/PHP/DB)
-let totalTerkumpul = 45000000; // Rp 45 juta
-let targetDonasi   = 100000000; // Rp 100 juta
+let totalTerkumpul = 0; // Rp 45 juta
+let targetDonasi   = 197818000; // Rp 100 juta
 
 function updateDonasi() {
   const persen = Math.min((totalTerkumpul / targetDonasi) * 100, 100);
