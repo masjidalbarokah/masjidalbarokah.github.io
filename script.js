@@ -122,14 +122,16 @@ function renderTable(data, page, rows) {
   paginatedItems.forEach(d => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${new Date(d.tanggal).toLocaleString("id-ID")}</td>
       <td>${d.nama}</td>
       <td>Rp ${Number(d.nominal).toLocaleString("id-ID")}</td>
+      <td>${d.matrial || "-"}</td>
       <td>${d.bukti ? `<a href="${d.bukti}" target="_blank">Lihat</a>` : "-"}</td>
+      <td>${new Date(d.tanggal).toLocaleString("id-ID")}</td>
     `;
     tbody.appendChild(tr);
   });
 }
+
 
 function renderPagination(totalItems, rows) {
   const pageCount = Math.ceil(totalItems / rows);
