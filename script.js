@@ -22,8 +22,10 @@ document.getElementById("donasiForm").addEventListener("submit", async (e) => {
   submitBtn.innerText = "Mengirim...";   // ubah teks biar user paham
 
   const nama = e.target.nama.value;
-  const nominal = e.target.nominal.value;
-  const file = e.target.bukti.files[0];
+const nominal = e.target.nominal.value;
+const matrial = e.target.matrial.value; // ✅ ambil input matrial
+const file = e.target.bukti.files[0];
+
 
   if (file) {
     const reader = new FileReader();
@@ -39,7 +41,7 @@ document.getElementById("donasiForm").addEventListener("submit", async (e) => {
 
 async function submitDonasi(nama, nominal, bukti, submitBtn) {
   try {
-    const payload = new URLSearchParams({ nama, nominal, bukti });
+    const payload = new URLSearchParams({ nama, nominal, bukti, matrial });
 
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
