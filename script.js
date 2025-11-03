@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", loadTotalDonasi);
 
 // RIWAYAT DONASI
 let currentPage = 1;
-const rowsPerPage = 5;
+const rowsPerPage = 10;
 
 async function loadDonasiTable() {
   try {
