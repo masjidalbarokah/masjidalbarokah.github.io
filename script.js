@@ -18,30 +18,29 @@ document.getElementById("donasiForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const submitBtn = e.target.querySelector("button[type=submit]");
-  submitBtn.disabled = true;             // matikan tombol biar gak dobel klik
-  submitBtn.innerText = "Mengirim...";   // ubah teks biar user paham
+  submitBtn.disabled = true;
+  submitBtn.innerText = "Mengirim...";
 
   const nama = e.target.nama.value;
-const nominal = e.target.nominal.value;
-const matrial = e.target.matrial.value; // ✅ ambil input matrial
-const file = e.target.bukti.files[0];
-
+  const nominal = e.target.nominal.value;
+  const matrial = e.target.matrial.value; // ✅ ambil nilai matrial
+  const file = e.target.bukti.files[0];
 
   if (file) {
     const reader = new FileReader();
     reader.onload = async () => {
       console.log("📸 Base64 terbaca, panjang:", reader.result.length);
-      await submitDonasi(nama, nominal, reader.result, submitBtn);
+      await submitDonasi(nama, nominal, matrial, reader.result, submitBtn); // ✅ kirim matrial ke function
     };
     reader.readAsDataURL(file);
   } else {
-    await submitDonasi(nama, nominal, "", submitBtn);
+    await submitDonasi(nama, nominal, matrial, "", submitBtn); // ✅ kirim matrial juga di sini
   }
 });
 
-async function submitDonasi(nama, nominal, bukti, submitBtn) {
+async function submitDonasi(nama, nominal, matrial, bukti, submitBtn) { // ✅ tambah param matrial
   try {
-    const payload = new URLSearchParams({ nama, nominal, bukti, matrial });
+    const payload = new URLSearchParams({ nama, nominal, matrial, bukti }); // ✅ kirim matrial ke server
 
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
@@ -64,7 +63,6 @@ async function submitDonasi(nama, nominal, bukti, submitBtn) {
     console.error("❌ Error kirim data:", err);
     alert("❌ Gagal mengirim data.");
   } finally {
-    // aktifkan kembali tombol setelah proses selesai
     submitBtn.disabled = false;
     submitBtn.innerText = "Laporkan";
   }
