@@ -1,32 +1,32 @@
-
 // ================== Config ==================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCFDZSie7VCytbfN8TpYWNb9X8E8wuobhujmBtLQJqg1UGvhwJ72f0lZ284czfG1zs/exec";
 let targetDonasi = 197_818_000; // ubah sesuai target
 
 // ================== Elements ==================
-const modal       = document.getElementById("donasiModal");
-const openModal   = document.getElementById("openModal");
-const closeModal  = document.querySelector(".close");
-const form        = document.getElementById("donasiForm");
+const modal = document.getElementById("donasiModal");
+const openModal = document.getElementById("openModal");
+const closeModal = document.querySelector(".close");
+const form = document.getElementById("donasiForm");
 
 // ================== Modal Logic ==================
-openModal.onclick  = () => (modal.style.display = "flex");
+openModal.onclick = () => (modal.style.display = "flex");
 closeModal.onclick = () => (modal.style.display = "none");
-window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+window.onclick = (e) => {
+  if (e.target === modal) modal.style.display = "none";
+};
 
 // ================== Submit Form Donasi ==================
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const submitBtn  = e.target.querySelector("button[type=submit]");
-  const nama       = e.target.nama.value.trim();
-  const nominalEl  = e.target.nominal;
-  const nominal    = nominalEl.value.trim();
+  const submitBtn = e.target.querySelector("button[type=submit]");
+  const nama = e.target.nama.value.trim();
+  const nominalEl = e.target.nominal;
+  const nominal = nominalEl.value.trim();
   const keterangan = e.target.keterangan.value.trim();
-  const jenis      = e.target.jenis.value;
-  const file       = e.target.bukti.files[0];
+  const jenis = e.target.jenis.value;
+  const file = e.target.bukti.files[0];
 
-  // Validasi ringan: jika jenis uang (Transfer/Cash) nominal wajib > 0
   if ((jenis === "Transfer Online" || jenis === "Cash") && (!nominal || Number(nominal) <= 0)) {
     alert("Nominal wajib diisi untuk donasi uang.");
     return;
@@ -35,18 +35,19 @@ form.addEventListener("submit", async (e) => {
   submitBtn.disabled = true;
   submitBtn.innerText = "Mengirim...";
 
-  // Kirim data (bukti -> base64 jika ada)
   const send = async (b64) => {
     try {
       const payload = new URLSearchParams({ nama, nominal, keterangan, jenis, bukti: b64 || "" });
-      const res  = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: payload });
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: payload,
+      });
       const text = await res.text();
 
       if (text.includes("Success")) {
         alert("✅ Donasi berhasil dilaporkan!");
         form.reset();
-        // balikkan input nominal jika sebelumnya nonaktif
-        nominalEl.disabled = (e.target.jenis.value === "Matrial") ? true : false;
         modal.style.display = "none";
         await Promise.all([loadTotalDonasi(), loadDonasiTable()]);
       } else {
@@ -70,22 +71,24 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-// ================== Toggle Nominal berdasarkan Jenis ==================
+// ================== Toggle Nominal Berdasarkan Jenis ==================
 (function addJenisListener() {
-  const jenisSel   = form?.jenis;
-  const nominalEl  = form?.nominal;
+  const jenisSel = form?.jenis;
+  const nominalEl = form?.nominal;
   if (!jenisSel || !nominalEl) return;
 
   const toggleNominal = () => {
-    const isMatrial = (jenisSel.value === "Matrial");
-    nominalEl.disabled   = isMatrial;
-    nominalEl.required   = !isMatrial;
-    nominalEl.placeholder = isMatrial ? "Nominal tidak wajib untuk material" : "Contoh: 100000";
+    const isMatrial = jenisSel.value === "Matrial";
+    nominalEl.disabled = isMatrial;
+    nominalEl.required = !isMatrial;
+    nominalEl.placeholder = isMatrial
+      ? "Nominal tidak wajib untuk material"
+      : "Contoh: 100000";
     if (isMatrial) nominalEl.value = "";
   };
 
   jenisSel.addEventListener("change", toggleNominal);
-  toggleNominal(); // set kondisi awal
+  toggleNominal();
 })();
 
 // ================== Total Donasi & Progress ==================
@@ -109,36 +112,48 @@ async function loadTotalDonasi() {
   }
 }
 
-// ================== Riwayat Donasi (tabel + pagination) ==================
+// ================== Riwayat Donasi, Filter & Pagination ==================
+let allDonations = [];
+let activeFilter = "all";
 let currentPage = 1;
 let rowsPerPage = 10;
 
-async function loadDonasiTable() {
-  try {
-    const res = await fetch(SCRIPT_URL + "?action=getDonations");
-    const data = await res.json();
-    const donations = (data.donations || []).reverse(); // terbaru di atas
+function initFilterTabs() {
+  const buttons = document.querySelectorAll(".tab-btn");
+  if (!buttons.length) return;
 
-    renderTable(donations, currentPage, rowsPerPage);
-    renderPagination(donations.length, rowsPerPage);
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      buttons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeFilter = btn.dataset.filter;
+      currentPage = 1;
+      applyFilter();
+    });
+  });
+}
 
-    const total = donations.reduce((sum, d) => sum + Number(d.nominal || 0), 0);
-    document.getElementById("donasiTotal").innerText =
-      "Total Semua Donasi: Rp " + total.toLocaleString("id-ID");
-  } catch (err) {
-    console.error("⚠️ Gagal load riwayat:", err);
+function applyFilter() {
+  let filtered = allDonations;
+  if (activeFilter !== "all") {
+    filtered = allDonations.filter(
+      (d) => (d.jenis || "").toLowerCase() === activeFilter.toLowerCase()
+    );
   }
+
+  renderTable(filtered, currentPage, rowsPerPage);
+  renderPagination(filtered.length, rowsPerPage);
 }
 
 function renderTable(data, page, rows) {
   const start = (page - 1) * rows;
-  const end   = start + rows;
+  const end = start + rows;
   const items = data.slice(start, end);
 
   const tbody = document.querySelector("#donasiTable tbody");
   tbody.innerHTML = "";
 
-  items.forEach(d => {
+  items.forEach((d) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${d.nama || "-"}</td>
@@ -152,7 +167,6 @@ function renderTable(data, page, rows) {
   });
 }
 
-// ================== Pagination ==================
 function renderPagination(totalItems, rows) {
   const pageCount = Math.max(1, Math.ceil(totalItems / rows));
   const pagination = document.getElementById("pagination");
@@ -166,67 +180,37 @@ function renderPagination(totalItems, rows) {
     return b;
   };
 
-  // Prev
-  pagination.appendChild(makeBtn("Prev", currentPage === 1, () => {
-    if (currentPage > 1) currentPage--;
-    applyFilter(); // 🔁 bukan loadDonasiTable
-  }));
+  pagination.appendChild(
+    makeBtn("Prev", currentPage === 1, () => {
+      if (currentPage > 1) currentPage--;
+      applyFilter();
+    })
+  );
 
   for (let i = 1; i <= pageCount; i++) {
     const btn = makeBtn(String(i), i === currentPage, () => {
       currentPage = i;
-      applyFilter(); // 🔁 tetap pakai applyFilter agar filter aktif
+      applyFilter();
     });
     pagination.appendChild(btn);
   }
 
-  // Next
-  pagination.appendChild(makeBtn("Next", currentPage === pageCount, () => {
-    if (currentPage < pageCount) currentPage++;
-    applyFilter(); // 🔁 tetap pakai filter
-  }));
-}
-
-// ================== Filter Tabs ==================
-let allDonations = []; // semua data donasi
-let activeFilter = "all";
-
-function initFilterTabs() {
-  const buttons = document.querySelectorAll(".tab-btn");
-  if (!buttons.length) return; // pastiin elemen udah ada di DOM
-
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      buttons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      activeFilter = btn.dataset.filter;
-      currentPage = 1; // reset ke halaman pertama tiap ganti filter
+  pagination.appendChild(
+    makeBtn("Next", currentPage === pageCount, () => {
+      if (currentPage < pageCount) currentPage++;
       applyFilter();
-    });
-  });
+    })
+  );
 }
 
-function applyFilter() {
-  let filtered = allDonations;
-  if (activeFilter !== "all") {
-    filtered = allDonations.filter(d => (d.jenis || "").toLowerCase() === activeFilter.toLowerCase());
-  }
-
-  renderTable(filtered, currentPage, rowsPerPage);
-  renderPagination(filtered.length, rowsPerPage);
-}
-
-// ================== Load Donasi Table ==================
 async function loadDonasiTable() {
   try {
     const res = await fetch(SCRIPT_URL + "?action=getDonations");
     const data = await res.json();
     allDonations = (data.donations || []).reverse();
+    initFilterTabs();
+    applyFilter();
 
-    initFilterTabs(); // 🔥 pastiin ini dijalankan setelah data dan DOM siap
-    applyFilter(); // render awal sesuai tab aktif (default: semua)
-
-    // total donasi keseluruhan
     const total = allDonations.reduce((sum, d) => sum + Number(d.nominal || 0), 0);
     document.getElementById("donasiTotal").innerText =
       "Total Semua Donasi: Rp " + total.toLocaleString("id-ID");
@@ -235,11 +219,10 @@ async function loadDonasiTable() {
   }
 }
 
-// ================== Init Setelah DOM Siap ==================
+// ================== INIT ==================
 document.addEventListener("DOMContentLoaded", () => {
   loadTotalDonasi();
   loadDonasiTable();
-});
 
   // Typed
   if (window.Typed) {
@@ -249,7 +232,12 @@ document.addEventListener("DOMContentLoaded", () => {
         "Tempat Silaturahmi Jamaah",
         "Membangun Generasi Qur'ani",
       ],
-      typeSpeed: 60, backSpeed: 40, backDelay: 1500, loop: true, showCursor: true, cursorChar: "|",
+      typeSpeed: 60,
+      backSpeed: 40,
+      backDelay: 1500,
+      loop: true,
+      showCursor: true,
+      cursorChar: "|",
     });
   }
 
@@ -261,8 +249,11 @@ document.addEventListener("DOMContentLoaded", () => {
       loop: true,
       centeredSlides: true,
       pagination: { el: ".swiper-pagination", clickable: true },
-      navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
-      breakpoints: { 768: { slidesPerView: 1.5 }, 1024: { slidesPerView: 2.5 } }
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: { 768: { slidesPerView: 1.5 }, 1024: { slidesPerView: 2.5 } },
     });
   }
 
@@ -270,19 +261,21 @@ document.addEventListener("DOMContentLoaded", () => {
   window.copyRekening = function () {
     const rekening = document.getElementById("rekening")?.innerText || "";
     if (!rekening) return;
-    navigator.clipboard.writeText(rekening).then(() => alert("Nomor rekening berhasil dicopy: " + rekening));
+    navigator.clipboard
+      .writeText(rekening)
+      .then(() => alert("Nomor rekening berhasil dicopy: " + rekening));
   };
 
   // Toggle mobile menu
   const toggle = document.querySelector(".menu-toggle");
-  const nav    = document.querySelector("nav ul");
+  const nav = document.querySelector("nav ul");
   toggle?.addEventListener("click", () => nav?.classList.toggle("show"));
 
   // Jadwal Sholat
   const KOTA_ID = 1209;
   (async () => {
     try {
-      const today   = new Date();
+      const today = new Date();
       const y = today.getFullYear();
       const m = String(today.getMonth() + 1).padStart(2, "0");
       const d = String(today.getDate()).padStart(2, "0");
@@ -291,13 +284,14 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data?.status && data?.data?.jadwal) {
         const j = data.data.jadwal;
         document.getElementById("tanggalSholat").innerText = `${j.tanggal} (${data.data.lokasi})`;
-        document.getElementById("subuh").innerText   = j.subuh;
-        document.getElementById("dzuhur").innerText  = j.dzuhur;
-        document.getElementById("ashar").innerText   = j.ashar;
+        document.getElementById("subuh").innerText = j.subuh;
+        document.getElementById("dzuhur").innerText = j.dzuhur;
+        document.getElementById("ashar").innerText = j.ashar;
         document.getElementById("maghrib").innerText = j.maghrib;
-        document.getElementById("isya").innerText    = j.isya;
+        document.getElementById("isya").innerText = j.isya;
       }
-    } catch (e) { console.error("Error fetch jadwal sholat:", e); }
+    } catch (e) {
+      console.error("Error fetch jadwal sholat:", e);
+    }
   })();
 });
-
