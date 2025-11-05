@@ -1,21 +1,19 @@
-// ================== Config ==================
+// ================== CONFIG ==================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCFDZSie7VCytbfN8TpYWNb9X8E8wuobhujmBtLQJqg1UGvhwJ72f0lZ284czfG1zs/exec";
-let targetDonasi = 197_818_000; // ubah sesuai target
+let targetDonasi = 197_818_000; // 🎯 ubah sesuai target
 
-// ================== Elements ==================
+// ================== ELEMENTS ==================
 const modal = document.getElementById("donasiModal");
 const openModal = document.getElementById("openModal");
 const closeModal = document.querySelector(".close");
 const form = document.getElementById("donasiForm");
 
-// ================== Modal Logic ==================
+// ================== MODAL LOGIC ==================
 openModal.onclick = () => (modal.style.display = "flex");
 closeModal.onclick = () => (modal.style.display = "none");
-window.onclick = (e) => {
-  if (e.target === modal) modal.style.display = "none";
-};
+window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
 
-// ================== Submit Form Donasi ==================
+// ================== SUBMIT FORM DONASI ==================
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -25,10 +23,16 @@ form.addEventListener("submit", async (e) => {
   const nominal = nominalEl.value.trim();
   const keterangan = e.target.keterangan.value.trim();
   const jenis = e.target.jenis.value;
+  const alamat = e.target.alamat?.value.trim() || "";
   const file = e.target.bukti.files[0];
 
-  if ((jenis === "Transfer Online" || jenis === "Cash") && (!nominal || Number(nominal) <= 0)) {
-    alert("Nominal wajib diisi untuk donasi uang.");
+  if ((!nominal || Number(nominal) <= 0)) {
+    alert("Nominal wajib diisi dan harus lebih dari 0.");
+    return;
+  }
+
+  if (jenis === "Cash" && !alamat) {
+    alert("Alamat wajib diisi untuk donasi tunai (Cash).");
     return;
   }
 
@@ -37,7 +41,7 @@ form.addEventListener("submit", async (e) => {
 
   const send = async (b64) => {
     try {
-      const payload = new URLSearchParams({ nama, nominal, keterangan, jenis, bukti: b64 || "" });
+      const payload = new URLSearchParams({ nama, nominal, keterangan, jenis, alamat, bukti: b64 || "" });
       const res = await fetch(SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -71,7 +75,7 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-// ================== Toggle Field Berdasarkan Jenis ==================
+// ================== TOGGLE FIELD BERDASARKAN JENIS ==================
 (function handleJenisDonasi() {
   const jenisSel = form?.jenis;
   const nominalEl = form?.nominal;
@@ -81,7 +85,7 @@ form.addEventListener("submit", async (e) => {
   const toggleFields = () => {
     const jenis = jenisSel.value;
 
-    // Nominal wajib aktif di semua jenis
+    // Nominal selalu aktif & wajib
     nominalEl.disabled = false;
     nominalEl.required = true;
     nominalEl.placeholder =
@@ -89,7 +93,7 @@ form.addEventListener("submit", async (e) => {
         ? "Masukkan estimasi nilai material (Rp)"
         : "Contoh: 100000";
 
-    // 🔥 Tampilkan alamat hanya jika jenis = Cash
+    // 🔥 Tampilkan alamat hanya kalau jenis = Cash
     if (jenis === "Cash") {
       alamatWrap.style.display = "block";
       alamatWrap.querySelector("input").required = true;
@@ -104,10 +108,7 @@ form.addEventListener("submit", async (e) => {
   toggleFields();
 })();
 
-
-
-
-// ================== Total Donasi & Progress ==================
+// ================== TOTAL DONASI & PROGRESS ==================
 async function loadTotalDonasi() {
   try {
     const res = await fetch(SCRIPT_URL + "?action=getTotal");
@@ -128,7 +129,7 @@ async function loadTotalDonasi() {
   }
 }
 
-// ================== Riwayat Donasi, Filter & Pagination ==================
+// ================== RIWAYAT DONASI + FILTER + PAGINATION ==================
 let allDonations = [];
 let activeFilter = "all";
 let currentPage = 1;
@@ -176,6 +177,7 @@ function renderTable(data, page, rows) {
       <td>Rp ${Number(d.nominal || 0).toLocaleString("id-ID")}</td>
       <td>${d.keterangan || "-"}</td>
       <td>${d.jenis || "-"}</td>
+      <td>${d.alamat || "-"}</td>
       <td>${d.bukti ? `<a href="${d.bukti}" target="_blank" rel="noopener">Lihat</a>` : "-"}</td>
       <td>${d.tanggal ? new Date(d.tanggal).toLocaleString("id-ID") : "-"}</td>
     `;
