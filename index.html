@@ -195,19 +195,26 @@
 <section id="riwayat" class="section">
   <h2>Riwayat Donasi</h2>
 
+  <!-- 🔥 Tabs Filter -->
+  <div class="filter-tabs">
+    <button class="tab-btn active" data-filter="all">Semua</button>
+    <button class="tab-btn" data-filter="Transfer Online">Transfer Online</button>
+    <button class="tab-btn" data-filter="Cash">Cash</button>
+    <button class="tab-btn" data-filter="Matrial">Matrial</button>
+  </div>
+
   <div class="table-wrapper">
     <table id="donasiTable">
-     <thead>
-  <tr>
-    <th>Nama</th>
-    <th>Nominal</th>
-    <th>Keterangan</th>
-    <th>Jenis</th>
-    <th>Bukti</th>
-    <th>Tanggal</th>
-  </tr>
-</thead>
-
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Nominal</th>
+          <th>Keterangan</th>
+          <th>Jenis</th>
+          <th>Bukti</th>
+          <th>Tanggal</th>
+        </tr>
+      </thead>
       <tbody></tbody>
     </table>
   </div>
@@ -215,6 +222,7 @@
   <div id="pagination"></div>
   <p id="donasiTotal"></p>
 </section>
+
 
 
 
