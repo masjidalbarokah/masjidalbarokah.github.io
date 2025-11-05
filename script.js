@@ -1,5 +1,5 @@
 // ================== CONFIG ==================
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCFDZSie7VCytbfN8TpYWNb9X8E8wuobhujmBtLQJqg1UGvhwJ72f0lZ284czfG1zs/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhNrg_Oh3md_Mqp5jgBWPm-trieHs9D4zeHP9Lslqmpt5WOM0FI4GBIvEnF6iXudi3/exec/exec";
 let targetDonasi = 197_818_000; // 🎯 ubah sesuai target
 
 // ================== ELEMENTS ==================
