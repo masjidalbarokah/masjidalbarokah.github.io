@@ -71,25 +71,25 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-// ================== Toggle Nominal Berdasarkan Jenis ==================
-(function addJenisListener() {
+// ================== Toggle Nominal Berdasarkan Jenis (FINAL FIX) ==================
+(function enableNominalForAll() {
   const jenisSel = form?.jenis;
   const nominalEl = form?.nominal;
   if (!jenisSel || !nominalEl) return;
 
-  const toggleNominal = () => {
-    const isMatrial = jenisSel.value === "Matrial";
-    nominalEl.disabled = isMatrial;
-    nominalEl.required = !isMatrial;
-    nominalEl.placeholder = isMatrial
-      ? "Nominal tidak wajib untuk material"
-      : "Contoh: 100000";
-    if (isMatrial) nominalEl.value = "";
+  const updatePlaceholder = () => {
+    nominalEl.disabled = false; // 🔥 pastikan bisa diketik
+    nominalEl.required = true;  // 🔥 tetap wajib diisi
+    nominalEl.placeholder =
+      jenisSel.value === "Matrial"
+        ? "Masukkan estimasi nilai material (Rp)"
+        : "Contoh: 100000";
   };
 
-  jenisSel.addEventListener("change", toggleNominal);
-  toggleNominal();
+  jenisSel.addEventListener("change", updatePlaceholder);
+  updatePlaceholder();
 })();
+
 
 
 // ================== Total Donasi & Progress ==================
