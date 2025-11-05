@@ -71,24 +71,39 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-// ================== Toggle Nominal Berdasarkan Jenis (FINAL FIX) ==================
-(function enableNominalForAll() {
+// ================== Toggle Field Berdasarkan Jenis ==================
+(function handleJenisDonasi() {
   const jenisSel = form?.jenis;
   const nominalEl = form?.nominal;
-  if (!jenisSel || !nominalEl) return;
+  const alamatWrap = document.getElementById("alamat-wrapper");
+  if (!jenisSel || !nominalEl || !alamatWrap) return;
 
-  const updatePlaceholder = () => {
-    nominalEl.disabled = false; // 🔥 pastikan bisa diketik
-    nominalEl.required = true;  // 🔥 tetap wajib diisi
+  const toggleFields = () => {
+    const jenis = jenisSel.value;
+
+    // Nominal wajib aktif di semua jenis
+    nominalEl.disabled = false;
+    nominalEl.required = true;
     nominalEl.placeholder =
-      jenisSel.value === "Matrial"
+      jenis === "Matrial"
         ? "Masukkan estimasi nilai material (Rp)"
         : "Contoh: 100000";
+
+    // 🔥 Tampilkan alamat hanya jika jenis = Cash
+    if (jenis === "Cash") {
+      alamatWrap.style.display = "block";
+      alamatWrap.querySelector("input").required = true;
+    } else {
+      alamatWrap.style.display = "none";
+      alamatWrap.querySelector("input").required = false;
+      alamatWrap.querySelector("input").value = "";
+    }
   };
 
-  jenisSel.addEventListener("change", updatePlaceholder);
-  updatePlaceholder();
+  jenisSel.addEventListener("change", toggleFields);
+  toggleFields();
 })();
+
 
 
 
