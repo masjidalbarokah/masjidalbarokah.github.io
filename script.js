@@ -177,6 +177,49 @@ function renderPagination(totalItems, rows) {
   pagination.appendChild(makeBtn("Next", currentPage === pageCount, () => { currentPage++; loadDonasiTable(); }));
 }
 
+// ================== Filter Tabs ==================
+let allDonations = []; // simpan semua data donasi agar bisa difilter ulang
+let activeFilter = "all";
+
+function initFilterTabs() {
+  const buttons = document.querySelectorAll(".tab-btn");
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeFilter = btn.dataset.filter;
+      applyFilter();
+    });
+  });
+}
+
+function applyFilter() {
+  let filtered = allDonations;
+  if (activeFilter !== "all") {
+    filtered = allDonations.filter(d => (d.jenis || "").toLowerCase() === activeFilter.toLowerCase());
+  }
+  renderTable(filtered, currentPage, rowsPerPage);
+  renderPagination(filtered.length, rowsPerPage);
+}
+
+// Modifikasi loadDonasiTable biar simpan semua data
+async function loadDonasiTable() {
+  try {
+    const res = await fetch(SCRIPT_URL + "?action=getDonations");
+    const data = await res.json();
+    allDonations = (data.donations || []).reverse(); // simpan semua data
+
+    applyFilter(); // render sesuai filter aktif
+    initFilterTabs();
+
+    const total = allDonations.reduce((sum, d) => sum + Number(d.nominal || 0), 0);
+    document.getElementById("donasiTotal").innerText =
+      "Total Semua Donasi: Rp " + total.toLocaleString("id-ID");
+  } catch (err) {
+    console.error("⚠️ Gagal load riwayat:", err);
+  }
+}
+
 // ================== Typed Text, Swiper, Copy Rekening, Jadwal Sholat ==================
 document.addEventListener("DOMContentLoaded", () => {
   loadTotalDonasi();
