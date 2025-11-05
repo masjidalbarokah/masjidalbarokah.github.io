@@ -162,30 +162,34 @@
     <span class="close">&times;</span>
     <h3>Konfirmasi Donasi</h3>
     <form id="donasiForm">
-      <label>Nama Donatur</label>
-      <input type="text" name="nama" required>
+  <label>Nama Donatur</label>
+  <input type="text" name="nama" required>
 
-      <label>Jumlah Nominal (Rp)</label>
-      <input type="number" name="nominal" required>
+  <label>Jumlah Nominal (Rp)</label>
+  <input type="number" name="nominal" required>
 
-      <label>Keterangan Donasi</label>
-      <input type="text" name="keterangan" placeholder="Contoh: Uang tunai, Semen 10 sak, Batu satu dump" required>
+  <label>Keterangan Donasi</label>
+  <input type="text" name="keterangan" placeholder="Contoh: Uang tunai, Semen 10 sak, Batu satu dump">
 
-      <label>Jenis Donasi</label>
-      <select name="jenis" required>
-        <option value="">-- Pilih Jenis Donasi --</option>
-        <option value="Transfer Online">Transfer Online</option>
-        <option value="Cash">Cash</option>
-        <option value="Matrial">Matrial</option>
-      </select>
+  <label>Jenis Donasi</label>
+  <select name="jenis" required>
+    <option value="Transfer Online">Transfer Online</option>
+    <option value="Cash">Cash</option>
+    <option value="Matrial">Matrial</option>
+  </select>
 
-      <label>Upload Bukti (opsional)</label>
-      <input type="file" name="bukti" accept="image/*">
+  <!-- 🔥 Tambahan field alamat (auto muncul hanya saat jenis Cash) -->
+  <div id="alamat-wrapper" style="display:none;">
+    <label>Alamat Donatur</label>
+    <input type="text" name="alamat" placeholder="Masukkan alamat Anda">
+  </div>
 
-      <button type="submit" class="btn" style="background:green; border-radius:12px; width:95%; padding: 5px 10px;color:white">
-        Laporkan
-      </button>
-    </form>
+  <label>Upload Bukti (opsional)</label>
+  <input type="file" name="bukti" accept="image/*">
+
+  <button type="submit" class="btn" style="background:green; border-radius:12px; width:95%; padding: 5px 10px;color:white">Laporkan</button>
+</form>
+
   </div>
 </div>
 
