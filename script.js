@@ -1,5 +1,5 @@
 // ================== CONFIG ==================
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhNrg_Oh3md_Mqp5jgBWPm-trieHs9D4zeHP9Lslqmpt5WOM0FI4GBIvEnF6iXudi3/exec/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhNrg_Oh3md_Mqp5jgBWPm-trieHs9D4zeHP9Lslqmpt5WOM0FI4GBIvEnF6iXudi3/exec";
 let targetDonasi = 197_818_000; // 🎯 ubah sesuai target
 
 // ================== ELEMENTS ==================
@@ -26,11 +26,13 @@ form.addEventListener("submit", async (e) => {
   const alamat = e.target.alamat?.value.trim() || "";
   const file = e.target.bukti.files[0];
 
-  if ((!nominal || Number(nominal) <= 0)) {
+  // Validasi nominal
+  if (!nominal || Number(nominal) <= 0) {
     alert("Nominal wajib diisi dan harus lebih dari 0.");
     return;
   }
 
+  // Validasi alamat untuk donasi Cash
   if (jenis === "Cash" && !alamat) {
     alert("Alamat wajib diisi untuk donasi tunai (Cash).");
     return;
@@ -41,6 +43,7 @@ form.addEventListener("submit", async (e) => {
 
   const send = async (b64) => {
     try {
+      // ✅ kirim semua data termasuk alamat
       const payload = new URLSearchParams({ nama, nominal, keterangan, jenis, alamat, bukti: b64 || "" });
       const res = await fetch(SCRIPT_URL, {
         method: "POST",
@@ -94,13 +97,15 @@ form.addEventListener("submit", async (e) => {
         : "Contoh: 100000";
 
     // 🔥 Tampilkan alamat hanya kalau jenis = Cash
+    const alamatInput = alamatWrap.querySelector("input");
     if (jenis === "Cash") {
       alamatWrap.style.display = "block";
-      alamatWrap.querySelector("input").required = true;
+      alamatInput.required = true;
+      alamatInput.placeholder = "Masukkan alamat donatur";
     } else {
       alamatWrap.style.display = "none";
-      alamatWrap.querySelector("input").required = false;
-      alamatWrap.querySelector("input").value = "";
+      alamatInput.required = false;
+      alamatInput.value = "";
     }
   };
 
@@ -203,7 +208,6 @@ function renderTable(data, page, rows, filter) {
     tbody.appendChild(tr);
   });
 }
-
 
 function renderPagination(totalItems, rows) {
   const pageCount = Math.max(1, Math.ceil(totalItems / rows));
