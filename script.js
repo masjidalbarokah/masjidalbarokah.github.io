@@ -158,11 +158,11 @@ function applyFilter() {
     );
   }
 
-  renderTable(filtered, currentPage, rowsPerPage);
+  renderTable(filtered, currentPage, rowsPerPage, activeFilter);
   renderPagination(filtered.length, rowsPerPage);
 }
 
-function renderTable(data, page, rows) {
+function renderTable(data, page, rows, filter) {
   const start = (page - 1) * rows;
   const end = start + rows;
   const items = data.slice(start, end);
@@ -171,31 +171,32 @@ function renderTable(data, page, rows) {
   const thead = document.querySelector("#donasiTable thead");
   tbody.innerHTML = "";
 
-  // 🔍 Cek apakah ada data jenis Cash di halaman ini
-  const adaCash = items.some(d => (d.jenis || "").toLowerCase() === "cash");
+  // 🔍 tampilkan kolom alamat kalau tab aktif Cash
+  const tampilAlamat = (filter === "cash");
 
-  // 🔁 Update header tabel dinamis
+  // 🔁 update header tabel
   thead.innerHTML = `
     <tr>
       <th>Nama</th>
       <th>Nominal</th>
       <th>Keterangan</th>
       <th>Jenis</th>
-      ${adaCash ? "<th>Alamat</th>" : ""}
+      ${tampilAlamat ? "<th>Alamat</th>" : ""}
       <th>Bukti</th>
       <th>Tanggal</th>
     </tr>
   `;
 
-  // 🔁 Render isi tabel
+  // 🔁 isi tabel
   items.forEach((d) => {
+    const isCash = (d.jenis || "").toLowerCase() === "cash";
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${d.nama || "-"}</td>
       <td>Rp ${Number(d.nominal || 0).toLocaleString("id-ID")}</td>
       <td>${d.keterangan || "-"}</td>
       <td>${d.jenis || "-"}</td>
-      ${adaCash ? `<td>${(d.jenis || "").toLowerCase() === "cash" ? (d.alamat || "-") : ""}</td>` : ""}
+      ${tampilAlamat ? `<td>${isCash ? (d.alamat || "-") : "-"}</td>` : ""}
       <td>${d.bukti ? `<a href="${d.bukti}" target="_blank" rel="noopener">Lihat</a>` : "-"}</td>
       <td>${d.tanggal ? new Date(d.tanggal).toLocaleString("id-ID") : "-"}</td>
     `;
