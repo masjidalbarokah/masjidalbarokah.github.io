@@ -168,13 +168,21 @@
       <label>Jumlah Nominal (Rp)</label>
       <input type="number" name="nominal" required>
 
-      <label>Jenis Donasi / Matrial</label>
-      <input type="text" name="matrial" placeholder="Contoh: Uang, Semen, Pasir, Batu, dll" required>
+      <label>Keterangan Donasi</label>
+      <input type="text" name="keterangan" placeholder="Contoh: Uang tunai, Semen 10 sak, Batu satu dump" required>
+
+      <label>Jenis Donasi</label>
+      <select name="jenis" required>
+        <option value="">-- Pilih Jenis Donasi --</option>
+        <option value="Transfer Online">Transfer Online</option>
+        <option value="Cash">Cash</option>
+        <option value="Matrial">Matrial</option>
+      </select>
 
       <label>Upload Bukti (opsional)</label>
       <input type="file" name="bukti" accept="image/*">
 
-      <button type="submit" class="btn" style="background:green; border-radius:12px; width:95%; padding:5px 10px; color:white">
+      <button type="submit" class="btn" style="background:green; border-radius:12px; width:95%; padding: 5px 10px;color:white">
         Laporkan
       </button>
     </form>
@@ -189,15 +197,17 @@
 
   <div class="table-wrapper">
     <table id="donasiTable">
-      <thead>
-        <tr>
-          <th>Nama</th>
-          <th>Nominal</th>
-          <th>Matrial</th>
-          <th>Bukti</th>
-          <th>Tanggal</th>
-        </tr>
-      </thead>
+     <thead>
+  <tr>
+    <th>Nama</th>
+    <th>Nominal</th>
+    <th>Keterangan</th>
+    <th>Jenis</th>
+    <th>Bukti</th>
+    <th>Tanggal</th>
+  </tr>
+</thead>
+
       <tbody></tbody>
     </table>
   </div>
