@@ -152,8 +152,9 @@ function renderTable(data, page, rows) {
   });
 }
 
+// ================== Pagination ==================
 function renderPagination(totalItems, rows) {
-  const pageCount  = Math.max(1, Math.ceil(totalItems / rows));
+  const pageCount = Math.max(1, Math.ceil(totalItems / rows));
   const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
 
@@ -166,28 +167,40 @@ function renderPagination(totalItems, rows) {
   };
 
   // Prev
-  pagination.appendChild(makeBtn("Prev", currentPage === 1, () => { currentPage--; loadDonasiTable(); }));
+  pagination.appendChild(makeBtn("Prev", currentPage === 1, () => {
+    if (currentPage > 1) currentPage--;
+    applyFilter(); // 🔁 bukan loadDonasiTable
+  }));
 
   for (let i = 1; i <= pageCount; i++) {
-    const btn = makeBtn(String(i), i === currentPage, () => { currentPage = i; loadDonasiTable(); });
+    const btn = makeBtn(String(i), i === currentPage, () => {
+      currentPage = i;
+      applyFilter(); // 🔁 tetap pakai applyFilter agar filter aktif
+    });
     pagination.appendChild(btn);
   }
 
   // Next
-  pagination.appendChild(makeBtn("Next", currentPage === pageCount, () => { currentPage++; loadDonasiTable(); }));
+  pagination.appendChild(makeBtn("Next", currentPage === pageCount, () => {
+    if (currentPage < pageCount) currentPage++;
+    applyFilter(); // 🔁 tetap pakai filter
+  }));
 }
 
 // ================== Filter Tabs ==================
-let allDonations = []; // simpan semua data donasi agar bisa difilter ulang
+let allDonations = []; // semua data donasi
 let activeFilter = "all";
 
 function initFilterTabs() {
   const buttons = document.querySelectorAll(".tab-btn");
+  if (!buttons.length) return; // pastiin elemen udah ada di DOM
+
   buttons.forEach(btn => {
     btn.addEventListener("click", () => {
       buttons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       activeFilter = btn.dataset.filter;
+      currentPage = 1; // reset ke halaman pertama tiap ganti filter
       applyFilter();
     });
   });
@@ -198,20 +211,22 @@ function applyFilter() {
   if (activeFilter !== "all") {
     filtered = allDonations.filter(d => (d.jenis || "").toLowerCase() === activeFilter.toLowerCase());
   }
+
   renderTable(filtered, currentPage, rowsPerPage);
   renderPagination(filtered.length, rowsPerPage);
 }
 
-// Modifikasi loadDonasiTable biar simpan semua data
+// ================== Load Donasi Table ==================
 async function loadDonasiTable() {
   try {
     const res = await fetch(SCRIPT_URL + "?action=getDonations");
     const data = await res.json();
-    allDonations = (data.donations || []).reverse(); // simpan semua data
+    allDonations = (data.donations || []).reverse();
 
-    applyFilter(); // render sesuai filter aktif
-    initFilterTabs();
+    initFilterTabs(); // 🔥 pastiin ini dijalankan setelah data dan DOM siap
+    applyFilter(); // render awal sesuai tab aktif (default: semua)
 
+    // total donasi keseluruhan
     const total = allDonations.reduce((sum, d) => sum + Number(d.nominal || 0), 0);
     document.getElementById("donasiTotal").innerText =
       "Total Semua Donasi: Rp " + total.toLocaleString("id-ID");
@@ -220,10 +235,11 @@ async function loadDonasiTable() {
   }
 }
 
-// ================== Typed Text, Swiper, Copy Rekening, Jadwal Sholat ==================
+// ================== Init Setelah DOM Siap ==================
 document.addEventListener("DOMContentLoaded", () => {
   loadTotalDonasi();
   loadDonasiTable();
+});
 
   // Typed
   if (window.Typed) {
