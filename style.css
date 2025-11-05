@@ -452,3 +452,33 @@ footer {
     height: 400px;
   }
 }
+
+.filter-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-tabs .tab-btn {
+  padding: 8px 16px;
+  border: 1px solid #198754;
+  border-radius: 6px;
+  background: white;
+  color: #198754;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.filter-tabs .tab-btn:hover {
+  background: #198754;
+  color: white;
+}
+
+.filter-tabs .tab-btn.active {
+  background: #198754;
+  color: white;
+  box-shadow: 0 0 6px rgba(0,0,0,0.15);
+}
