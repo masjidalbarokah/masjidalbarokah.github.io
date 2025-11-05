@@ -168,8 +168,26 @@ function renderTable(data, page, rows) {
   const items = data.slice(start, end);
 
   const tbody = document.querySelector("#donasiTable tbody");
+  const thead = document.querySelector("#donasiTable thead");
   tbody.innerHTML = "";
 
+  // 🔍 Cek apakah ada data jenis Cash di halaman ini
+  const adaCash = items.some(d => (d.jenis || "").toLowerCase() === "cash");
+
+  // 🔁 Update header tabel dinamis
+  thead.innerHTML = `
+    <tr>
+      <th>Nama</th>
+      <th>Nominal</th>
+      <th>Keterangan</th>
+      <th>Jenis</th>
+      ${adaCash ? "<th>Alamat</th>" : ""}
+      <th>Bukti</th>
+      <th>Tanggal</th>
+    </tr>
+  `;
+
+  // 🔁 Render isi tabel
   items.forEach((d) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -177,13 +195,14 @@ function renderTable(data, page, rows) {
       <td>Rp ${Number(d.nominal || 0).toLocaleString("id-ID")}</td>
       <td>${d.keterangan || "-"}</td>
       <td>${d.jenis || "-"}</td>
-      <td>${d.alamat || "-"}</td>
+      ${adaCash ? `<td>${(d.jenis || "").toLowerCase() === "cash" ? (d.alamat || "-") : ""}</td>` : ""}
       <td>${d.bukti ? `<a href="${d.bukti}" target="_blank" rel="noopener">Lihat</a>` : "-"}</td>
       <td>${d.tanggal ? new Date(d.tanggal).toLocaleString("id-ID") : "-"}</td>
     `;
     tbody.appendChild(tr);
   });
 }
+
 
 function renderPagination(totalItems, rows) {
   const pageCount = Math.max(1, Math.ceil(totalItems / rows));
