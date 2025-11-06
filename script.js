@@ -293,53 +293,21 @@ function renderPaginationPengeluaran() {
   const container = document.getElementById("paginationPengeluaran");
   container.innerHTML = "";
 
-  const makeBtn = (label, disabled, onClick, isActive = false) => {
+  const makeBtn = (label, disabled, onClick) => {
     const b = document.createElement("button");
     b.textContent = label;
     b.disabled = disabled;
-    if (isActive) b.classList.add("active");
     b.onclick = onClick;
     return b;
   };
 
-  // Tombol Prev
-  container.appendChild(
-    makeBtn("Prev", currentPagePengeluaran === 1, () => {
-      if (currentPagePengeluaran > 1) {
-        currentPagePengeluaran--;
-        renderPengeluaranTable();
-        renderPaginationPengeluaran();
-      }
-    })
-  );
-
-  // Nomor halaman
-  for (let i = 1; i <= totalPages; i++) {
-    container.appendChild(
-      makeBtn(
-        i,
-        false,
-        () => {
-          currentPagePengeluaran = i;
-          renderPengeluaranTable();
-          renderPaginationPengeluaran();
-        },
-        i === currentPagePengeluaran // aktif
-      )
-    );
-  }
-
-  // Tombol Next
-  container.appendChild(
-    makeBtn("Next", currentPagePengeluaran === totalPages, () => {
-      if (currentPagePengeluaran < totalPages) {
-        currentPagePengeluaran++;
-        renderPengeluaranTable();
-        renderPaginationPengeluaran();
-      }
-    })
-  );
-}
+  container.appendChild(makeBtn("‹", currentPagePengeluaran === 1, () => {
+    if (currentPagePengeluaran > 1) {
+      currentPagePengeluaran--;
+      renderPengeluaranTable();
+      renderPaginationPengeluaran();
+    }
+  }));
 
   for (let i = 1; i <= totalPages; i++) {
     const btn = makeBtn(String(i), i === currentPagePengeluaran, () => {
