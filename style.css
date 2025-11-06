@@ -584,3 +584,36 @@ footer {
   color: #1b6b34;
 }
 
+/* === Pagination Style (Donasi & Pengeluaran) === */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 20px 0;
+}
+
+.pagination button {
+  background: #198754; /* hijau bootstrap style */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+.pagination button:hover {
+  background: #146c43;
+}
+
+.pagination button.active {
+  background: #0f5132;
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
