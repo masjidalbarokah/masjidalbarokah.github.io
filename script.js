@@ -301,7 +301,7 @@ function renderPaginationPengeluaran() {
     return b;
   };
 
-  container.appendChild(makeBtn("‹", currentPagePengeluaran === 1, () => {
+  container.appendChild(makeBtn("Prev", currentPagePengeluaran === 1, () => {
     if (currentPagePengeluaran > 1) {
       currentPagePengeluaran--;
       renderPengeluaranTable();
@@ -319,7 +319,7 @@ function renderPaginationPengeluaran() {
     container.appendChild(btn);
   }
 
-  container.appendChild(makeBtn("›", currentPagePengeluaran === totalPages, () => {
+  container.appendChild(makeBtn("Next", currentPagePengeluaran === totalPages, () => {
     if (currentPagePengeluaran < totalPages) {
       currentPagePengeluaran++;
       renderPengeluaranTable();
