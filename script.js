@@ -1,6 +1,6 @@
 // ================== CONFIG ==================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyWPQvos833aN6LZUMmPP6QvdPkpVFWzuhSpSUUg-zId-yYVHNjurld1eXhJeXsJds/exec";
-let targetDonasi = 197_818_000; // 🎯 ubah sesuai target
+let targetDonasi = 350_000_000; // 🎯 ubah sesuai target
 
 // ================== ELEMENTS ==================
 const modal = document.getElementById("donasiModal");
