@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfirmasi Donasi - Masjid Al-Barokah</title>
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f3f6f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 450px;
+            margin: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007b5e;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            color: #444;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #007b5e;
+            box-shadow: 0 0 5px rgba(0, 123, 94, 0.4);
+        }
+
+        .btn-submit {
+            background: #007b5e;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 25px;
+            font-weight: bold;
+        }
+
+        .btn-submit:hover {
+            background: #009a74;
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007b5e;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .msg {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+            color: #888;
+        }
+
+        #totalHargaDisplay {
+            background: #f9f9f9;
+            font-weight: bold;
+            color: #007b5e;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>🕌 Konfirmasi Donasi</h2>
+        <p style="text-align: center; font-size: 0.9em; color: #666; margin-bottom: 20px;">
+            Silakan isi form ini untuk mengonfirmasi donasi Anda. Jazakumullahu Khairan.
+        </p>
+
+        <form id="donasiForm">
+            <label>Nama Donatur</label>
+            <input type="text" name="nama" placeholder="Masukkan nama lengkap" required>
+
+            <label>Jenis Donasi</label>
+            <select name="jenis" id="jenisInput" required>
+                <option value="Transfer Online">Transfer Online</option>
+                <option value="Cash">Cash</option>
+                <option value="Matrial">Matrial</option>
+            </select>
+
+            <!-- Field Khusus Uang -->
+            <div id="uang-fields">
+                <label>Jumlah Nominal (Rp)</label>
+                <input type="number" name="nominal" id="nominalInput" placeholder="Contoh: 100000">
+            </div>
+
+            <!-- Field Khusus Matrial -->
+            <div id="matrial-fields" style="display:none;">
+                <label>Nama Barang</label>
+                <input type="text" name="namaBarang" placeholder="Contoh: Semen">
+
+                <label>Satuan</label>
+                <input type="text" name="satuan" placeholder="Contoh: Sak">
+
+                <label>Volume</label>
+                <input type="number" name="volume" id="volumeInput" step="any" placeholder="Contoh: 10">
+
+                <label>Harga Satuan (Rp)</label>
+                <input type="number" name="hargaSatuan" id="hargaSatuanInput" placeholder="Contoh: 65000">
+
+                <label>Total Harga (Otomatis)</label>
+                <input type="number" id="totalHargaDisplay" disabled placeholder="0">
+            </div>
+
+            <div id="alamat-wrapper" style="display:none;">
+                <label for="alamat">Alamat Donatur</label>
+                <input type="text" id="alamat" name="alamat" placeholder="Masukkan alamat donatur" />
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">Laporkan Donasi</button>
+        </form>
+
+        <div class="loading" id="loading">⏳ Mengirim data...</div>
+        <div class="msg" id="msg"></div>
+
+        <a href="index.html" class="back-link">⬅ Kembali ke Beranda</a>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeYyPiZ_Nvu1__b_NIOOFPNGu-BCid_plwiklYSATV6YAfj67BDEOI0JAYNSgqjidIig/exec";
+
+        const form = document.getElementById("donasiForm");
+        const jenisSel = document.getElementById("jenisInput");
+        const uangFields = document.getElementById("uang-fields");
+        const matrialFields = document.getElementById("matrial-fields");
+        const alamatWrap = document.getElementById("alamat-wrapper");
+        const submitBtn = document.getElementById("submitBtn");
+        const loading = document.getElementById("loading");
+        const msg = document.getElementById("msg");
+
+        // Toggle Fields Logic
+        const toggleFields = () => {
+            const jenis = jenisSel.value;
+            const isMatrial = (jenis === "Matrial");
+            const isCash = (jenis === "Cash");
+
+            uangFields.style.display = isMatrial ? "none" : "block";
+            matrialFields.style.display = isMatrial ? "block" : "none";
+            alamatWrap.style.display = isCash ? "block" : "none";
+
+            // Set required based on visibility
+            form.nominal.required = !isMatrial;
+            form.namaBarang.required = isMatrial;
+            form.satuan.required = isMatrial;
+            form.volume.required = isMatrial;
+            form.hargaSatuan.required = isMatrial;
+        };
+
+        jenisSel.addEventListener("change", toggleFields);
+
+        // Auto Calculate Total Matrial
+        const vInput = document.getElementById("volumeInput");
+        const hInput = document.getElementById("hargaSatuanInput");
+        const tDisplay = document.getElementById("totalHargaDisplay");
+
+        const calculateTotal = () => {
+            const total = Number(vInput.value || 0) * Number(hInput.value || 0);
+            tDisplay.value = total;
+        };
+        vInput.addEventListener("input", calculateTotal);
+        hInput.addEventListener("input", calculateTotal);
+
+        // Initial Toggle
+        toggleFields();
+
+        // Submit Form
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            const jenis = data.jenis;
+
+            let payload = { action: "addDonation", ...data };
+
+            if (jenis === "Matrial") {
+                payload.nominal = Number(data.volume || 0) * Number(data.hargaSatuan || 0);
+            }
+
+            loading.style.display = "block";
+            submitBtn.disabled = true;
+            msg.textContent = "";
+
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams(payload),
+                });
+                const text = await res.text();
+                loading.style.display = "none";
+
+                if (text.includes("Success")) {
+                    msg.textContent = "✅ Donasi berhasil dilaporkan!";
+                    msg.style.color = "green";
+                    form.reset();
+                    tDisplay.value = "";
+                    toggleFields();
+                } else {
+                    msg.textContent = "⚠️ Gagal: " + text;
+                    msg.style.color = "red";
+                    submitBtn.disabled = false;
+                }
+            } catch (err) {
+                loading.style.display = "none";
+                submitBtn.disabled = false;
+                msg.textContent = "❌ Terjadi kesalahan: " + err.message;
+                msg.style.color = "red";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
