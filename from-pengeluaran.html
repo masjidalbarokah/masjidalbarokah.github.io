@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Pengeluaran Masjid</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #f3f6f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 420px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #007b5e;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+      color: #444;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      font-size: 15px;
+    }
+
+    input:focus {
+      border-color: #007b5e;
+      box-shadow: 0 0 5px rgba(0, 123, 94, 0.4);
+    }
+
+    button {
+      background: #007b5e;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #009a74;
+    }
+
+    .msg {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: 500;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 10px;
+      color: #888;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>🧾 Form Pengeluaran Masjid</h2>
+
+    <form id="pengeluaranForm">
+      <label for="namaBarang">Nama Barang</label>
+      <input type="text" id="namaBarang" name="namaBarang" placeholder="Contoh: Semen" required>
+
+      <label for="satuan">Satuan</label>
+      <input type="text" id="satuan" name="satuan" placeholder="Contoh: Sak" required>
+
+      <label for="volume">Volume</label>
+      <input type="number" id="volume" name="volume" step="any" placeholder="Contoh: 10" required>
+
+      <label for="hargaSatuan">Harga Satuan (Rp)</label>
+      <input type="number" id="hargaSatuan" name="hargaSatuan" placeholder="Contoh: 65000" required>
+
+      <label>Total Harga (Otomatis)</label>
+      <input type="number" id="jumlahHarga" name="jumlahHarga" placeholder="0" readonly>
+
+      <button type="submit">💾 Simpan Pengeluaran</button>
+    </form>
+
+    <div class="loading" id="loading">⏳ Menyimpan data...</div>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-nStOFu0_qCoOF4QHYhrLe-VPIHTqqLyo35MnbBQEIRhgQIfvWfFcNgBF_MG4lcPrvg/exec";
+
+    document.getElementById("pengeluaranForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+      const msg = document.getElementById("msg");
+      const loading = document.getElementById("loading");
+
+      loading.style.display = "block";
+      msg.textContent = "";
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: new URLSearchParams({
+            action: "addExpense",
+            ...data
+          })
+        });
+
+        const text = await res.text();
+        loading.style.display = "none";
+
+        if (text.toLowerCase().includes("success")) {
+          msg.textContent = "✅ Data pengeluaran berhasil disimpan!";
+          msg.style.color = "green";
+          e.target.reset();
+          document.getElementById("jumlahHarga").value = "";
+        } else {
+          msg.textContent = "❌ Gagal: " + text;
+          msg.style.color = "red";
+        }
+
+      } catch (err) {
+        loading.style.display = "none";
+        msg.textContent = "❌ Terjadi kesalahan: " + err.message;
+        msg.style.color = "red";
+      }
+    });
+
+    // Auto Calculate Total
+    const volInp = document.getElementById("volume");
+    const prcInp = document.getElementById("hargaSatuan");
+    const totInp = document.getElementById("jumlahHarga");
+
+    const calc = () => {
+      const tot = Number(volInp.value || 0) * Number(prcInp.value || 0);
+      totInp.value = tot;
+    };
+    volInp.addEventListener("input", calc);
+    prcInp.addEventListener("input", calc);
+  </script>
+
+</body>
+
+</html>
