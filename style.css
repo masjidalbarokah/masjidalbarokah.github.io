@@ -1,0 +1,884 @@
+/* RESET & BASE */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* HERO */
+.hero {
+  background: url('assets/masjid.jpg') center/cover no-repeat;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  position: relative;
+  padding: 0 20px;
+}
+
+.hero .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.hero-content {
+  z-index: 10;
+  max-width: 800px;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.hero .btn {
+  padding: 10px 20px;
+  background: #2e7d32;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.hero .btn:hover {
+  background: #1b5e20;
+}
+
+/* NAVIGATION */
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 30px;
+  z-index: 20;
+  align-items: center;
+}
+
+nav .logo {
+  font-weight: 700;
+  color: white;
+  font-size: 1.2rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+nav ul li a {
+  color: white;
+  font-weight: 500;
+}
+
+/* MOBILE NAV */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  height: 3px;
+  width: 25px;
+  background: white;
+  margin: 4px 0;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.9);
+    flex-direction: column;
+    width: 200px;
+    display: none;
+    padding: 20px;
+  }
+
+  nav ul.show {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+}
+
+/* SECTION */
+.section {
+  padding: 60px 20px;
+  max-width: 1100px;
+  margin: auto;
+  text-align: center;
+}
+
+.section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #2e7d32;
+}
+
+/* JADWAL */
+.jadwal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.jadwal div {
+  flex: 1 1 100px;
+  padding: 10px;
+  background: #2e7d32;
+  color: white;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+/* CARDS */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: left;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  color: #2e7d32;
+  margin: 15px 15px 5px;
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0 15px 20px;
+  line-height: 1.4;
+}
+
+.card video {
+  width: 100%;
+  height: 190px;
+  /* sesuaikan dengan tinggi card */
+  object-fit: cover;
+  /* biar video nggak gepeng */
+  border-radius: 10px;
+  display: block;
+}
+
+
+/* DONASI */
+.donasi-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 600px;
+  margin: 20px auto;
+  gap: 20px;
+  text-align: left;
+}
+
+.donasi-box img {
+  width: 60px;
+  height: auto;
+}
+
+.donasi-info h3 {
+  font-size: 1.2rem;
+  color: #2e7d32;
+  margin-bottom: 8px;
+}
+
+.donasi-info p {
+  font-size: 0.95rem;
+  color: #444;
+  margin: 5px 0;
+}
+
+.copy-btn {
+  margin-left: 10px;
+  padding: 3px 8px;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background: #2e7d32;
+  color: white;
+  transition: background 0.3s;
+}
+
+.copy-btn:hover {
+  background: #1b5e20;
+}
+
+.donasi-stats {
+  margin: 15px auto;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: #444;
+  font-weight: 600;
+}
+
+@media (max-width: 500px) {
+  .donasi-stats {
+    flex-direction: column;
+    text-align: center;
+    gap: 5px;
+  }
+}
+
+/* PROGRESS BAR */
+.progress {
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px auto;
+  width: 95%;
+}
+
+.progress-bar {
+  background: #2e7d32;
+  color: white;
+  padding: 2px;
+  text-align: center;
+  min-width: 50px;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h3 {
+  margin-bottom: 15px;
+  color: #2e7d32;
+}
+
+.modal-content label {
+  display: block;
+  margin: 10px 0 5px;
+  font-size: 0.9rem;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal-content .btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.close {
+  float: right;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+#donasiTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+#donasiTable th,
+#donasiTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+#donasiTable th {
+  background: #2e7d32;
+  color: white;
+}
+
+#pagination {
+  margin-top: 15px;
+  text-align: center;
+}
+
+#pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: none;
+  background: #2e7d32;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#pagination button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+/* Wrapper supaya tabel bisa discroll horizontal */
+#donasiTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  min-width: 600px;
+  /* biar di desktop rapih */
+}
+
+#donasiTable th,
+#donasiTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+#donasiTable th {
+  background: #2e7d32;
+  color: white;
+}
+
+/* Responsive: bungkus tabel dalam div */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Mode stacked untuk layar kecil */
+@media (max-width: 50px) {
+
+  #donasiTable,
+  #donasiTable thead,
+  #donasiTable tbody,
+  #donasiTable th,
+  #donasiTable td,
+  #donasiTable tr {
+    display: block;
+    width: 100%;
+  }
+
+  #donasiTable tr {
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+    padding: 10px;
+  }
+
+  #donasiTable td {
+    text-align: left;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  #donasiTable td::before {
+    position: absolute;
+    left: 10px;
+    width: 45%;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #333;
+  }
+
+  #donasiTable td:nth-of-type(1)::before {
+    content: "Tanggal";
+  }
+
+  #donasiTable td:nth-of-type(2)::before {
+    content: "Nama";
+  }
+
+  #donasiTable td:nth-of-type(3)::before {
+    content: "Nominal";
+  }
+
+  #donasiTable td:nth-of-type(4)::before {
+    content: "Bukti";
+  }
+}
+
+/* GALERY SLIDER */
+.myGallery {
+  width: 100%;
+  padding: 20px 0 40px;
+}
+
+.swiper-slide {
+  transition: transform 0.3s ease;
+}
+
+.swiper-slide-active {
+  transform: scale(1);
+  /* normal */
+}
+
+.swiper-slide-next,
+.swiper-slide-prev {
+  transform: scale(0.9);
+  /* yang sebelahnya agak kecil */
+  opacity: 0.8;
+}
+
+.gallery-item {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.gallery-item h3 {
+  font-size: 1rem;
+  color: #2e7d32;
+  margin: 10px 15px 5px;
+}
+
+.gallery-item p {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0 15px 15px;
+}
+
+
+/* Atur tombol swiper */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #2e7d32;
+}
+
+.swiper-pagination-bullet-active {
+  background: #2e7d32;
+}
+
+/* KONTAK */
+.kontak-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: start;
+  margin-top: 30px;
+}
+
+.kontak-info {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.kontak-info h3 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  color: #2e7d32;
+}
+
+.kontak-info p {
+  font-size: 0.95rem;
+  margin: 10px 0;
+  color: #444;
+}
+
+.kontak-info a {
+  color: #2e7d32;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.kontak-info a:hover {
+  text-decoration: underline;
+}
+
+.btn-whatsapp {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #25D366;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebe5d;
+}
+
+.kontak-map iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .kontak-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* FOOTER */
+footer {
+  background: #2e7d32;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  font-size: 0.9rem;
+}
+
+.donasi-warning {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  border-radius: 8px;
+  padding: 12px 15px;
+  margin: 15px 0;
+  font-size: 15px;
+  line-height: 1.6;
+  box-shadow: 0 0 5px rgba(255, 193, 7, 0.4);
+}
+
+.pdf-viewer {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
+  background: #fafafa;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-viewer iframe {
+  width: 100%;
+  height: 600px;
+  border: none;
+}
+
+@media (max-width: 600px) {
+  .pdf-viewer iframe {
+    height: 400px;
+  }
+}
+
+.filter-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-tabs .tab-btn {
+  padding: 8px 16px;
+  border: 1px solid #198754;
+  border-radius: 6px;
+  background: white;
+  color: #198754;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.filter-tabs .tab-btn:hover {
+  background: #198754;
+  color: white;
+}
+
+.filter-tabs .tab-btn.active {
+  background: #198754;
+  color: white;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+}
+
+
+
+
+
+
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.donasi-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  min-width: 700px;
+}
+
+.donasi-table th {
+  background-color: #1b6b34;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.donasi-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  white-space: nowrap;
+}
+
+.donasi-table tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+.donasi-table tr:hover {
+  background-color: #e8ffe3;
+}
+
+/* 🔘 Filter Controls: Tahun & Bulan */
+.filter-controls {
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.year-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.year-selector label {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.year-selector select {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #2e7d32;
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.month-tabs-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.month-tabs {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+  min-width: max-content;
+  padding: 0 10px;
+}
+
+@media (min-width: 768px) {
+  .month-tabs {
+    justify-content: center;
+  }
+}
+
+.month-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #e4e4e4;
+  color: #333;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.month-btn:hover {
+  background-color: #c9f2d0;
+}
+
+.month-btn.active {
+  background-color: #1b6b34;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.type-filter {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.type-btn {
+  padding: 8px 18px;
+  border: 1px solid #1b6b34;
+  border-radius: 20px;
+  background-color: white;
+  color: #1b6b34;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.type-btn:hover {
+  background-color: #f0fff4;
+}
+
+.type-btn.active {
+  background-color: #1b6b34;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+/* 📜 Pagination */
+.pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #eee;
+  border: none;
+  padding: 5px 10px;
+  margin: 3px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pagination button:hover {
+  background-color: #c1f0c6;
+}
+
+.pagination button:disabled {
+  background-color: #1b6b34;
+  color: white;
+  cursor: default;
+}
+
+/* 💰 Total donasi */
+.total-donasi {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #1b6b34;
+}
+
+/* === Pagination Style (Donasi & Pengeluaran) === */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 20px 0;
+}
+
+.pagination button {
+  background: #198754;
+  /* hijau bootstrap style */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+.pagination button:hover {
+  background: #146c43;
+}
+
+.pagination button.active {
+  background: #0f5132;
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
