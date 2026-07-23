@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta content="#0a4325" name="theme-color">
+  <meta content="Masjid Jammi Kedungkacip" name="keywords">
+  <title>Masjid Al-Barokah - Pusat Ibadah & Dakwah</title>
+  
+  <!-- Meta Icons & Tags -->
+  <link href='assets/logo-masjid.png' rel='icon' type='image/x-icon' />
+  <link href='assets/logo-masjid.png' rel='apple-touch-icon-precomposed' />
+  <meta content='Masjid Jammi Kedungkacip' name='description' />
+  
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Plugins -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <i class="fa-solid fa-mosque"></i> Al-Barokah
+      </a>
+      <div class="menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#about">Tentang</a></li>
+          <li><a href="#jadwal">Jadwal Sholat</a></li>
+          <li><a href="#programs">Program</a></li>
+          <li style="display:none"><a href="#proposal">Proposal</a></li>
+          <li><a href="#donasi">Donasi</a></li>
+          <li><a href="#riwayat">Riwayat Keuangan</a></li>
+          <li><a href="#kontak">Kontak</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section class="hero" id="beranda">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="bismillah">﷽</div>
+      <h1>Selamat Datang di Masjid Al-Barokah</h1>
+      <div class="typed-wrapper">
+        <span id="typed-text"></span>
+      </div>
+      <div class="hero-actions">
+        <a href="#donasi" class="btn btn-primary"><i class="fa-solid fa-hand-holding-heart"></i> Donasi Sekarang</a>
+        <a href="#jadwal" class="btn btn-outline"><i class="fa-regular fa-clock"></i> Jadwal Sholat</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= JADWAL SHOLAT ================= -->
+  <section id="jadwal" class="section jadwal-section">
+    <div class="container text-center">
+      <h2 class="section-title">Jadwal Sholat Hari Ini</h2>
+      <p id="tanggalSholat" class="date-display">Memuat jadwal...</p>
+      
+      <div class="jadwal-grid">
+        <div class="jadwal-card">
+          <i class="fa-solid fa-cloud-moon"></i>
+          <span>Subuh</span>
+          <strong id="subuh">-</strong>
+        </div>
+        <div class="jadwal-card">
+          <i class="fa-solid fa-sun"></i>
+          <span>Dzuhur</span>
+          <strong id="dzuhur">-</strong>
+        </div>
+        <div class="jadwal-card">
+          <i class="fa-solid fa-cloud-sun"></i>
+          <span>Ashar</span>
+          <strong id="ashar">-</strong>
+        </div>
+        <div class="jadwal-card active">
+          <i class="fa-solid fa-moon"></i>
+          <span>Maghrib</span>
+          <strong id="maghrib">-</strong>
+        </div>
+        <div class="jadwal-card">
+          <i class="fa-solid fa-star-and-crescent"></i>
+          <span>Isya</span>
+          <strong id="isya">-</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT SECTION ================= -->
+  <section id="about" class="section bg-light">
+    <div class="container about-wrapper">
+      <div class="about-text">
+        <h4 class="section-subtitle">Mengenal Kami</h4>
+        <h2 class="section-title">Pusat Keagamaan & Pendidikan Umat</h2>
+        <p class="section-desc" style="margin: 0 0 1.5rem 0; text-align: left;">
+          Masjid Al-Barokah berdiri sejak tahun 1990 dan menjadi pusat ibadah sekaligus kegiatan sosial masyarakat. 
+          Dengan visi menjadi masjid yang makmur dan memakmurkan jamaah, serta misi menyelenggarakan ibadah, dakwah, 
+          pendidikan, dan pelayanan umat.
+        </p>
+        <ul class="about-list">
+          <li><i class="fa-solid fa-check-circle"></i> Menyelenggarakan ibadah mahdhah dengan nyaman</li>
+          <li><i class="fa-solid fa-check-circle"></i> Membina generasi muda melalui TPA & Kajian</li>
+          <li><i class="fa-solid fa-check-circle"></i> Menyalurkan bantuan sosial kepada warga sekitar</li>
+        </ul>
+      </div>
+      <div class="about-image">
+        <div class="img-frame">
+          <img src="assets/Gambar WhatsApp 2025-09-18 pukul 19.57.41_15a51e7a.jpg" alt="Masjid Al-Barokah">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROGRAM SECTION ================= -->
+  <section id="programs" class="section">
+    <div class="container">
+      <div class="text-center">
+        <h4 class="section-subtitle">Aktivitas Kami</h4>
+        <h2 class="section-title">Program & Kegiatan</h2>
+      </div>
+      
+      <div class="cards-grid">
+        <div class="program-card">
+          <div class="card-media">
+            <video src="assets/videocor1.mp4" controls muted playsinline></video>
+          </div>
+          <div class="card-content">
+            <h3>Video Pengecoran Pondasi</h3>
+            <p>Hari Senin, 10 Nov 2025 — pengecoran pondasi masjid dimulai.</p>
+          </div>
+        </div>
+        <div class="program-card">
+          <div class="card-media">
+            <img src="assets/cor1.jpg" alt="Pengecoran pondasi">
+          </div>
+          <div class="card-content">
+            <h3>Pengecoran Pondasi Masjid</h3>
+            <p>Hari senin tanggal 10 nov 2025 pengecoran pondasi masjid dilaksanakan dengan gotong royong jamaah.</p>
+          </div>
+        </div>
+        <div class="program-card">
+          <div class="card-media">
+            <img src="assets/Gambar WhatsApp 2025-11-04 pukul 00.33.49_6b9465fa.jpg" alt="Hari pertama Renov">
+          </div>
+          <div class="card-content">
+            <h3>Hari Pertama Renovasi Masjid</h3>
+            <p>Mulai potong besi cor untuk persiapan struktur bangunan.</p>
+          </div>
+        </div>
+        <div class="program-card">
+          <div class="card-media">
+            <img src="assets/Gambar WhatsApp 2025-11-04 pukul 00.34.07_7a8183ee.jpg" alt="Hari Kedua">
+          </div>
+          <div class="card-content">
+            <h3>Hari Kedua Renovasi</h3>
+            <p>Mulai merakit besi untuk struktur ceker bebek cor pondasi.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROPOSAL PDF ================= -->
+  <section style="display:none" id="proposal" class="section bg-light">
+    <div class="container text-center">
+      <h2 class="section-title">Proposal Pembangunan</h2>
+      <div class="pdf-viewer">
+        <iframe src="assets/proposal_masjid.pdf" width="100%" height="600" style="border:none;"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DONASI SECTION ================= -->
+  <section id="donasi" class="section bg-light donasi-section">
+    <div class="container">
+      <div class="text-center">
+        <h4 class="section-subtitle">Amal Jariyah</h4>
+        <h2 class="section-title">Donasi Pembangunan</h2>
+        <p class="section-desc">Bantu pembangunan & perawatan Masjid Al-Barokah. Setiap donasi Anda insyaAllah menjadi saksi kebaikan di akhirat kelak.</p>
+      </div>
+
+      <div class="donasi-wrapper">
+        <!-- Metode Penyaluran -->
+        <div class="donasi-info-card">
+          <h3 class="card-title"><i class="fa-solid fa-wallet"></i> Metode Penyaluran</h3>
+          
+          <div class="qris-box">
+            <h4>Donasi Cepat (QRIS)</h4>
+            <img src="assets/qris_masjid.jpeg" alt="QRIS Masjid" class="qris-img">
+          </div>
+
+          <div class="bank-box">
+            <div class="bank-header">
+              <img src="assets/mandiri.jpeg" alt="Logo Mandiri" class="bank-logo">
+              <div>
+                <h4>Bank Mandiri</h4>
+                <p>a.n <strong>Dulkarim (Bendahara)</strong></p>
+              </div>
+            </div>
+            <div class="rek-box">
+              <span id="rekening" class="rek-number">1340031912743</span>
+              <button class="btn-copy" onclick="copyRekening()"><i class="fa-regular fa-copy"></i> Salin</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress & Statistik -->
+        <div class="donasi-stats-card">
+          <h3 class="card-title"><i class="fa-solid fa-chart-line"></i> Progres Pembangunan</h3>
+          
+          <div class="progress-info">
+            <div class="stat-item">
+              <span class="stat-label">Terkumpul</span>
+              <strong class="stat-value text-green" id="donasi-terkumpul">Rp 0</strong>
+            </div>
+            <div class="stat-item" style="text-align: right;">
+              <span class="stat-label">Target</span>
+              <strong class="stat-value" id="donasi-target">Rp 50.000.000</strong>
+            </div>
+          </div>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar">0%</div>
+          </div>
+
+          <div class="breakdown-info">
+            <div class="breakdown-item"><i class="fa-solid fa-money-bill-wave"></i> <span id="total-uang">Uang: Rp 0</span></div>
+            <div class="breakdown-item"><i class="fa-solid fa-cubes"></i> <span id="total-matrial">Matrial: Rp 0</span></div>
+          </div>
+
+          <div class="donasi-warning" style="display:none">
+            <i class="fa-solid fa-circle-info"></i> <strong>Transparansi Keuangan:</strong> Kami mohon dengan hormat agar Anda meluangkan waktu untuk mengonfirmasi donasi Anda.
+          </div>
+          <a href="form-donasi.html" class="btn btn-primary btn-block" style="display:none; margin-top:1rem;">Konfirmasi Donasi Anda segera</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RIWAYAT KEUANGAN ================= -->
+  <section id="riwayat" class="section riwayat-section">
+    <div class="container">
+      <div class="text-center">
+        <h4 class="section-subtitle">Transparansi</h4>
+        <h2 class="section-title">Riwayat Keuangan</h2>
+      </div>
+
+      <div class="riwayat-container">
+        
+        <!-- Filter Controls -->
+        <div class="filter-controls">
+          <div class="filter-top">
+            <div class="year-selector">
+              <label for="filterYear"><i class="fa-regular fa-calendar"></i> Tahun:</label>
+              <select id="filterYear" class="modern-select">
+                <option value="2025">2025</option>
+                <option value="2026" selected>2026</option>
+              </select>
+            </div>
+            <div class="type-filter">
+              <button class="type-btn active" data-type="uang"><i class="fa-solid fa-rupiah-sign"></i> Donasi Uang</button>
+              <button class="type-btn" data-type="matrial"><i class="fa-solid fa-box"></i> Matrial</button>
+            </div>
+          </div>
+
+          <div class="month-tabs-wrapper">
+            <div class="month-tabs" id="monthTabs">
+              <button class="month-btn" data-month="0">Jan</button>
+              <button class="month-btn" data-month="1">Feb</button>
+              <button class="month-btn" data-month="2">Mar</button>
+              <button class="month-btn" data-month="3">Apr</button>
+              <button class="month-btn" data-month="4">Mei</button>
+              <button class="month-btn" data-month="5">Jun</button>
+              <button class="month-btn" data-month="6">Jul</button>
+              <button class="month-btn" data-month="7">Agu</button>
+              <button class="month-btn" data-month="8">Sep</button>
+              <button class="month-btn" data-month="9">Okt</button>
+              <button class="month-btn" data-month="10">Nov</button>
+              <button class="month-btn" data-month="11">Des</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabel Donasi (Pemasukan) -->
+        <div class="table-card">
+          <h3 class="table-title">Riwayat Donasi Masuk</h3>
+          <div class="table-wrapper">
+            <table id="donasiTable" class="modern-table">
+              <thead>
+                <!-- Injected by JS based on type -->
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="pagination" class="pagination"></div>
+          <div class="total-badge" id="donasiTotal">Total Semua Donasi Uang: Rp 0</div>
+        </div>
+
+        <!-- Tabel Pengeluaran -->
+        <div class="table-card mt-4">
+          <h3 class="table-title text-danger">Riwayat Pengeluaran</h3>
+          <div class="table-wrapper">
+            <table id="pengeluaranTable" class="modern-table table-danger">
+              <thead>
+                <tr>
+                  <th>Nama Barang</th>
+                  <th>Satuan</th>
+                  <th>Volume</th>
+                  <th>Harga Satuan</th>
+                  <th>Jumlah Harga</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="paginationPengeluaran" class="pagination"></div>
+        </div>
+
+        <!-- Summary (Saldo) -->
+        <div class="summary-boxes">
+          <div class="summary-box box-danger">
+            <div class="icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
+            <div class="details">
+              <span>Total Pengeluaran Keseluruhan</span>
+              <strong id="totalPengeluaran">Rp 0</strong>
+            </div>
+          </div>
+          <div class="summary-box box-success">
+            <div class="icon"><i class="fa-solid fa-vault"></i></div>
+            <div class="details">
+              <span>Sisa Saldo Donasi Saat Ini</span>
+              <strong id="sisaDonasi">Rp 0</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GALLERY SECTION ================= -->
+  <section id="gallery" class="section bg-light gallery-section">
+    <div class="container text-center">
+      <h4 class="section-subtitle">Dokumentasi</h4>
+      <h2 class="section-title">Galeri Masjid</h2>
+      
+      <div class="swiper myGallery">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="gallery-item">
+              <img src="assets/Gambar WhatsApp 2025-09-18 pukul 19.57.41_15a51e7a.jpg" alt="Tampak Depan">
+              <div class="gallery-caption">
+                <h3>Tampak depan Masjid</h3>
+                <p>Kajian rutin bersama ustadz setiap malam Jumat ba’da Isya.</p>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="gallery-item">
+              <img src="assets/Gambar WhatsApp 2025-11-04 pukul 00.33.49_6b9465fa.jpg" alt="Hari pertama">
+              <div class="gallery-caption">
+                <h3>Hari pertama renovasi</h3>
+                <p>Proses renovasi masjid untuk meningkatkan kenyamanan jamaah.</p>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="gallery-item">
+              <img src="assets/Gambar WhatsApp 2025-11-04 pukul 00.34.07_7a8183ee.jpg" alt="Kegiatan renov">
+              <div class="gallery-caption">
+                <h3>Kegiatan renovasi</h3>
+                <p>Proses merakit struktur besi bangunan.</p>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="gallery-item">
+              <img src="assets/cor1.jpg" alt="Kegiatan cor">
+              <div class="gallery-caption">
+                <h3>Pengecoran</h3>
+                <p>Gotong royong membangun fondasi masjid bersama warga.</p>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="gallery-item">
+              <img src="assets/cor2.jpg" alt="Kegiatan cor">
+              <div class="gallery-caption">
+                <h3>Pengecoran Lanjutan</h3>
+                <p>Proses pengecoran berjalan lancar alhamdulillah.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Pagination & Navigation -->
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT SECTION ================= -->
+  <section id="kontak" class="section kontak-section">
+    <div class="container">
+      <div class="text-center">
+        <h4 class="section-subtitle">Silaturahmi</h4>
+        <h2 class="section-title">Kontak & Lokasi</h2>
+      </div>
+
+      <div class="kontak-wrapper">
+        <div class="kontak-info">
+          <h3 class="card-title">Hubungi Kami</h3>
+          <ul class="contact-list">
+            <li>
+              <div class="icon"><i class="fa-solid fa-location-dot"></i></div>
+              <div class="text">
+                <strong>Alamat Lengkap</strong>
+                <p>Jl. Babakandampyang RT. 13, Indramayu, Jawa Barat</p>
+              </div>
+            </li>
+            <li>
+              <div class="icon"><i class="fa-solid fa-phone"></i></div>
+              <div class="text">
+                <strong>Telepon / WhatsApp</strong>
+                <p><a href="tel:083821110706">0838-2111-0706</a></p>
+              </div>
+            </li>
+            <li>
+              <div class="icon"><i class="fa-solid fa-envelope"></i></div>
+              <div class="text">
+                <strong>Email</strong>
+                <p><a href="mailto:masjidalbarokah0906@gmail.com">masjidalbarokah0906@gmail.com</a></p>
+              </div>
+            </li>
+          </ul>
+          <a href="https://wa.me/6283821110706" target="_blank" class="btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Chat WhatsApp</a>
+        </div>
+        
+        <div class="kontak-map">
+          <iframe src="https://www.google.com/maps?q=-6.5003186,108.0069931&z=15&output=embed" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <i class="fa-solid fa-mosque"></i> Masjid Al-Barokah
+        </div>
+        <p>Pusat ibadah, dakwah, dan pemberdayaan umat untuk membangun peradaban Islam yang rahmatan lil 'alamin.</p>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Masjid Al-Barokah. Semua Hak Dilindungi.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
