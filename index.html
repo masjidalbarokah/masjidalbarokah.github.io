@@ -804,4 +804,1040 @@
         <div class="summary-card saldo-card">
           <div class="summary-label">Sisa Saldo Kas</div>
           <div class="summary-value" id="sisaSaldo">Rp 0</div>
-  
+        </div>
+      </div>
+
+      <div class="tab-buttons">
+        <button type="button" class="tab-btn active" id="btnTabPemasukan" onclick="switchTab('pemasukan')">
+          Pemasukan (<span id="countPemasukan">0</span>)
+        </button>
+        <button type="button" class="tab-btn" id="btnTabPengeluaran" onclick="switchTab('pengeluaran')">
+          Pengeluaran (<span id="countPengeluaran">0</span>)
+        </button>
+      </div>
+
+      <div class="transparansi-toolbar">
+        <input type="search" id="searchInput" placeholder="Cari nama, alamat, atau barang...">
+        <select id="jenisFilter">
+          <option value="">Semua Jenis</option>
+        </select>
+        <select id="bulanFilter">
+          <option value="">Semua Bulan</option>
+        </select>
+      </div>
+
+      <div class="result-banner hidden" id="resultBanner">
+        <div class="result-banner-main" id="resultBannerMain"></div>
+        <div class="result-banner-sub" id="resultBannerSub"></div>
+      </div>
+
+      <div class="transparansi-status" id="statusText">Memuat data keuangan...</div>
+
+      <!-- Tabel Pemasukan -->
+      <div class="table-wrap" id="wrapPemasukan">
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama</th>
+              <th class="num">Nominal</th>
+              <th>Jenis</th>
+              <th>Alamat</th>
+              <th>Nama Barang</th>
+              <th>Satuan</th>
+              <th class="num">Volume</th>
+              <th class="num">Harga Satuan</th>
+              <th>Tanggal</th>
+            </tr>
+          </thead>
+          <tbody id="donasiBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Tabel Pengeluaran -->
+      <div class="table-wrap hidden" id="wrapPengeluaran">
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Barang</th>
+              <th>Satuan</th>
+              <th class="num">Volume</th>
+              <th class="num">Harga Satuan</th>
+              <th class="num">Jumlah Harga</th>
+              <th>Tanggal</th>
+            </tr>
+          </thead>
+          <tbody id="pengeluaranBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Navigasi Halaman (15 Baris per Halaman) -->
+      <div class="pagination-bar" id="paginationBar">
+        <button type="button" class="page-btn" id="prevPageBtn" onclick="changePage(-1)" disabled>
+          &larr; Sebelumnya
+        </button>
+        <span class="page-info" id="pageInfo">Halaman 1 dari 1</span>
+        <button type="button" class="page-btn" id="nextPageBtn" onclick="changePage(1)" disabled>
+          Berikutnya &rarr;
+        </button>
+      </div>
+    </section>
+
+    <!-- Bagian Kebutuhan Terkini -->
+    <section id="kebutuhan">
+      <h2>Kebutuhan Terkini</h2>
+      <div class="kebutuhan-subtitle" id="kebutuhanSubtitle">
+        Daftar material yang dibutuhkan untuk tahap pengerjaan saat ini:
+      </div>
+
+      <div class="kebutuhan-summary-row">
+        <div class="summary-card">
+          <div class="summary-label">Total Kebutuhan</div>
+          <div class="summary-value" id="totalKebutuhanRp">Rp 0</div>
+        </div>
+        <div class="summary-card saldo-card">
+          <div class="summary-label">Donasi Terkumpul</div>
+          <div class="summary-value" id="totalKebutuhanMasuk">0%</div>
+        </div>
+      </div>
+
+      <button type="button" class="toggle-kebutuhan-btn" id="toggleKebutuhanBtn" onclick="toggleKebutuhanPanel()">
+        Lihat Kebutuhan Material
+      </button>
+
+      <div class="kebutuhan-panel hidden" id="kebutuhanPanel">
+        <div class="transparansi-status" id="kebutuhanStatus">Memuat data kebutuhan terkini...</div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nama Barang</th>
+                <th>Jumlah</th>
+                <th class="num">Nilai (Rp)</th>
+                <th>Donasi Masuk</th>
+              </tr>
+            </thead>
+            <tbody id="kebutuhanBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="cta-kebutuhan">
+        <span>Ingin membantu memenuhi kebutuhan material di atas?</span>
+        <a href="#donasi">Salurkan Donasi</a>
+      </div>
+    </section>
+
+    <!-- Progres pembangunan -->
+    <section id="progres">
+      <h2>Progres pembangunan</h2>
+      <div class="progres-grid" id="progresList">Memuat...</div>
+    </section>
+
+    <!-- Galeri Dokumentasi -->
+    <section id="gallery">
+      <h2>Galeri Dokumentasi</h2>
+      <div class="gallery-grid" id="galleryList"></div>
+    </section>
+  </main>
+
+  <!-- Modal Pratinjau Gambar Progres & Galeri -->
+  <div class="img-modal hidden" id="imgModal" onclick="closeImgModal(event)">
+    <div class="img-modal-card">
+      <img id="imgModalSrc" src="" alt="">
+      <div class="img-modal-footer">
+        <span class="img-modal-caption" id="imgModalCaption"></span>
+        <button type="button" class="img-modal-close" onclick="closeImgModal()">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 Panitia Pembangunan Masjid Al-Barokah Tanjungkerta.
+  </footer>
+
+  <script>
+    function salinRekening(btn) {
+      const norek = document.getElementById('no-rek').innerText;
+      navigator.clipboard.writeText(norek).then(() => {
+        const teksAsli = btn.innerText;
+        btn.innerText = 'Nomor Tersalin!';
+        setTimeout(() => {
+          btn.innerText = teksAsli;
+        }, 2000);
+      });
+    }
+
+    function toggleKebutuhanPanel(forceOpen = false) {
+      const panel = document.getElementById("kebutuhanPanel");
+      const btn = document.getElementById("toggleKebutuhanBtn");
+      const isHidden = panel.classList.contains("hidden");
+
+      if (isHidden || forceOpen) {
+        panel.classList.remove("hidden");
+        btn.classList.add("expanded");
+        btn.textContent = "Sembunyikan Kebutuhan Material";
+      } else {
+        panel.classList.add("hidden");
+        btn.classList.remove("expanded");
+        btn.textContent = "Lihat Kebutuhan Material";
+      }
+    }
+
+    function goToKebutuhanTerkini() {
+      toggleKebutuhanPanel(true);
+      const target = document.getElementById("kebutuhan");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function openImgModal(event, src, title) {
+      if (event) {
+        event.stopPropagation();
+      }
+      if (!src) return;
+      const modal = document.getElementById("imgModal");
+      const modalImg = document.getElementById("imgModalSrc");
+      const modalCaption = document.getElementById("imgModalCaption");
+      modalImg.src = src;
+      modalImg.alt = title || "";
+      modalCaption.textContent = title || "";
+      modal.classList.remove("hidden");
+    }
+
+    function closeImgModal(event) {
+      const modal = document.getElementById("imgModal");
+      if (!event || event.target === modal) {
+        modal.classList.add("hidden");
+        document.getElementById("imgModalSrc").src = "";
+      }
+    }
+
+    // Daftar gambar untuk seluruh tahapan progres (huruf kecil)
+    const PROGRES_IMAGES = {
+      "pondasi": "pondasi.jpg",
+      "tempat wudlu": "tempat-wudlu.jpg",
+      "pilar utama badan masjid": "pilar-utama.jpg",
+      "pemasangan bata merah badan masjid": "bata-merah.jpg",
+      "sloof gantung badan masjid": "sloof-gantung.jpg",
+      "serambi": "serambi.jpg",
+      "dak atap": "dak-atap.jpg",
+      "kubah": "kubah.jpg",
+      "finishing": "finishing.jpg"
+    };
+
+    function getProgresImage(namaProgres) {
+      const key = String(namaProgres || "").trim().toLowerCase();
+      if (PROGRES_IMAGES[key]) return PROGRES_IMAGES[key];
+
+      for (const [k, imgPath] of Object.entries(PROGRES_IMAGES)) {
+        if (key.includes(k) || k.includes(key)) return imgPath;
+      }
+      return "";
+    }
+
+    // Daftar foto untuk Galeri Dokumentasi
+    const GALLERY_ITEMS = [
+      { judul: "Peletakan Batu Pertama", src: "peletakan-batu-pertama.jpg" },
+      { judul: "Kerja Bakti", src: "kerja-bakti.jpg" },      { judul: "Kolom cor gantung", src: "kolom-cor-gantung.jpg" },
+      { judul: "Lembur", src: "lembur.jpg" },      { judul: "pasang-batu-pondasi", src: "pasang-batu-pondasi.jpg" },
+
+      { judul: "Pengiriman Material", src: "pengiriman-material.jpg" },
+    
+      { judul: "Kiriman Bata Merah", src: "kiriman-bata-merah.jpg" }
+    ];
+
+    function renderGaleriDokumentasi() {
+      const galleryListEl = document.getElementById("galleryList");
+      if (!galleryListEl) return;
+
+      galleryListEl.innerHTML = "";
+
+      GALLERY_ITEMS.forEach((item) => {
+        const box = document.createElement("div");
+        box.className = "gallery-item";
+
+        const caption = document.createElement("span");
+        caption.className = "gallery-caption";
+        caption.textContent = item.judul;
+
+        if (item.src) {
+          const img = document.createElement("img");
+          img.src = item.src;
+          img.alt = item.judul;
+          img.onload = function () {
+            box.classList.add("has-photo");
+          };
+          img.onerror = function () {
+            box.classList.remove("has-photo");
+            img.remove();
+          };
+          box.appendChild(img);
+          box.addEventListener("click", function (ev) {
+            openImgModal(ev, item.src, item.judul);
+          });
+        }
+
+        box.appendChild(caption);
+        galleryListEl.appendChild(box);
+      });
+    }
+
+    const PEMASUKAN_CSV_URL =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0PbZGpmP46zhEaPFcueYKlMcgaMigCpLW7wYzbcxj7_K9cY1945fCJnAaOgqVNdO5sHxWYmovpau-/pub?output=csv";
+
+    const PENGELUARAN_CSV_URL =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0PbZGpmP46zhEaPFcueYKlMcgaMigCpLW7wYzbcxj7_K9cY1945fCJnAaOgqVNdO5sHxWYmovpau-/pub?gid=1067549405&single=true&output=csv";
+
+    const KEBUTUHAN_CSV_URL =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0PbZGpmP46zhEaPFcueYKlMcgaMigCpLW7wYzbcxj7_K9cY1945fCJnAaOgqVNdO5sHxWYmovpau-/pub?gid=827325385&single=true&output=csv";
+
+    const PROGRES_CSV_URL =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0PbZGpmP46zhEaPFcueYKlMcgaMigCpLW7wYzbcxj7_K9cY1945fCJnAaOgqVNdO5sHxWYmovpau-/pub?gid=182096057&single=true&output=csv";
+
+    const ROWS_PER_PAGE = 15;
+
+    const BULAN_NAMES = [
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+
+    const statusText = document.getElementById("statusText");
+    const donasiBody = document.getElementById("donasiBody");
+    const pengeluaranBody = document.getElementById("pengeluaranBody");
+    const totalDonasiUangEl = document.getElementById("totalDonasiUang");
+    const totalDonasiMatrialEl = document.getElementById("totalDonasiMatrial");
+    const totalPengeluaranEl = document.getElementById("totalPengeluaran");
+    const sisaSaldoEl = document.getElementById("sisaSaldo");
+    const countPemasukanEl = document.getElementById("countPemasukan");
+    const countPengeluaranEl = document.getElementById("countPengeluaran");
+    const searchInput = document.getElementById("searchInput");
+    const jenisFilter = document.getElementById("jenisFilter");
+    const bulanFilter = document.getElementById("bulanFilter");
+    const resultBanner = document.getElementById("resultBanner");
+    const resultBannerMain = document.getElementById("resultBannerMain");
+    const resultBannerSub = document.getElementById("resultBannerSub");
+    const wrapPemasukan = document.getElementById("wrapPemasukan");
+    const wrapPengeluaran = document.getElementById("wrapPengeluaran");
+    const btnTabPemasukan = document.getElementById("btnTabPemasukan");
+    const btnTabPengeluaran = document.getElementById("btnTabPengeluaran");
+    const prevPageBtn = document.getElementById("prevPageBtn");
+    const nextPageBtn = document.getElementById("nextPageBtn");
+    const pageInfoEl = document.getElementById("pageInfo");
+
+    const kebutuhanSubtitleEl = document.getElementById("kebutuhanSubtitle");
+    const kebutuhanStatusEl = document.getElementById("kebutuhanStatus");
+    const kebutuhanBody = document.getElementById("kebutuhanBody");
+    const totalKebutuhanRpEl = document.getElementById("totalKebutuhanRp");
+    const totalKebutuhanMasukEl = document.getElementById("totalKebutuhanMasuk");
+
+    const progresListEl = document.getElementById("progresList");
+
+    let pemasukanRows = [];
+    let pengeluaranRows = [];
+    let activeTab = "pemasukan";
+    let currentPage = 1;
+
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let cell = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const nextChar = text[i + 1];
+
+        if (inQuotes) {
+          if (char === '"' && nextChar === '"') {
+            cell += '"';
+            i++;
+          } else if (char === '"') {
+            inQuotes = false;
+          } else {
+            cell += char;
+          }
+        } else {
+          if (char === '"') {
+            inQuotes = true;
+          } else if (char === ",") {
+            row.push(cell.trim());
+            cell = "";
+          } else if (char === "\r" && nextChar === "\n") {
+            row.push(cell.trim());
+            rows.push(row);
+            row = [];
+            cell = "";
+            i++;
+          } else if (char === "\n" || char === "\r") {
+            row.push(cell.trim());
+            rows.push(row);
+            row = [];
+            cell = "";
+          } else {
+            cell += char;
+          }
+        }
+      }
+
+      if (cell.length > 0 || row.length > 0) {
+        row.push(cell.trim());
+        rows.push(row);
+      }
+
+      return rows;
+    }
+
+    function parseNumber(val) {
+      if (!val) return 0;
+      const cleaned = String(val).replace(/[^0-9.-]+/g, "");
+      const num = Number(cleaned);
+      return Number.isFinite(num) ? num : 0;
+    }
+
+    function formatRupiah(num) {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0
+      }).format(num);
+    }
+
+    function extractMonthKey(dateStr) {
+      if (!dateStr) return null;
+      const cleaned = String(dateStr).trim().split(" ")[0];
+
+      const slashMatch = cleaned.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (slashMatch) {
+        const month = parseInt(slashMatch[2], 10);
+        const year = parseInt(slashMatch[3], 10);
+        if (month >= 1 && month <= 12) {
+          return `${year}-${String(month).padStart(2, "0")}`;
+        }
+      }
+
+      const isoMatch = cleaned.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+      if (isoMatch) {
+        const year = parseInt(isoMatch[1], 10);
+        const month = parseInt(isoMatch[2], 10);
+        if (month >= 1 && month <= 12) {
+          return `${year}-${String(month).padStart(2, "0")}`;
+        }
+      }
+
+      const parsed = new Date(cleaned);
+      if (!Number.isNaN(parsed.getTime())) {
+        const year = parsed.getFullYear();
+        const month = parsed.getMonth() + 1;
+        return `${year}-${String(month).padStart(2, "0")}`;
+      }
+
+      return null;
+    }
+
+    function formatMonthLabel(monthKey) {
+      const [year, monthStr] = monthKey.split("-");
+      const idx = parseInt(monthStr, 10) - 1;
+      const monthName = BULAN_NAMES[idx] || monthStr;
+      return `${monthName} ${year}`;
+    }
+
+    function escapeHTML(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function switchTab(tab) {
+      activeTab = tab;
+      currentPage = 1;
+
+      if (tab === "pemasukan") {
+        btnTabPemasukan.classList.add("active");
+        btnTabPengeluaran.classList.remove("active");
+        wrapPemasukan.classList.remove("hidden");
+        wrapPengeluaran.classList.add("hidden");
+        jenisFilter.classList.remove("hidden");
+        searchInput.placeholder = "Cari nama, alamat, atau barang...";
+      } else {
+        btnTabPengeluaran.classList.add("active");
+        btnTabPemasukan.classList.remove("active");
+        wrapPengeluaran.classList.remove("hidden");
+        wrapPemasukan.classList.add("hidden");
+        jenisFilter.classList.add("hidden");
+        jenisFilter.value = "";
+        searchInput.placeholder = "Cari nama barang atau tanggal...";
+      }
+      renderActiveTable();
+    }
+
+    function changePage(delta) {
+      currentPage += delta;
+      renderActiveTable();
+      document.getElementById("transparansi").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function updatePagination(totalFiltered) {
+      const totalPages = Math.max(1, Math.ceil(totalFiltered / ROWS_PER_PAGE));
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      pageInfoEl.textContent = `Halaman ${currentPage} dari ${totalPages}`;
+      prevPageBtn.disabled = currentPage <= 1 || totalFiltered === 0;
+      nextPageBtn.disabled = currentPage >= totalPages || totalFiltered === 0;
+    }
+
+    function populateJenisFilter(rows) {
+      const uniqueJenis = [...new Set(rows.map((r) => r.jenis).filter(Boolean))];
+      uniqueJenis.sort((a, b) => a.localeCompare(b, "id"));
+
+      jenisFilter.innerHTML = '<option value="">Semua Jenis</option>';
+      uniqueJenis.forEach((jenis) => {
+        const opt = document.createElement("option");
+        opt.value = jenis;
+        opt.textContent = jenis;
+        jenisFilter.appendChild(opt);
+      });
+    }
+
+    function populateBulanFilter() {
+      const keys = new Set();
+      pemasukanRows.forEach((r) => {
+        if (r.monthKey) keys.add(r.monthKey);
+      });
+      pengeluaranRows.forEach((r) => {
+        if (r.monthKey) keys.add(r.monthKey);
+      });
+
+      const sortedKeys = [...keys].sort((a, b) => b.localeCompare(a));
+      const prevSelected = bulanFilter.value;
+
+      bulanFilter.innerHTML = '<option value="">Semua Bulan</option>';
+      sortedKeys.forEach((key) => {
+        const opt = document.createElement("option");
+        opt.value = key;
+        opt.textContent = formatMonthLabel(key);
+        bulanFilter.appendChild(opt);
+      });
+
+      if (prevSelected && sortedKeys.includes(prevSelected)) {
+        bulanFilter.value = prevSelected;
+      }
+    }
+
+    function updateSummaryCards() {
+      let sumUang = 0;
+      let sumMatrial = 0;
+      let sumLainnya = 0;
+
+      pemasukanRows.forEach((item) => {
+        const j = item.jenis.trim().toLowerCase();
+        if (j.includes("uang") || j.includes("cash") || j.includes("tunai") || j.includes("transfer")) {
+          sumUang += item.nominalNum;
+        } else if (j.includes("matrial") || j.includes("material") || j.includes("barang")) {
+          sumMatrial += item.nominalNum;
+        } else {
+          sumLainnya += item.nominalNum;
+        }
+      });
+
+      const sumIn = sumUang + sumMatrial + sumLainnya;
+      const sumOut = pengeluaranRows.reduce((acc, item) => acc + item.jumlahHargaNum, 0);
+      const saldo = sumIn - sumOut;
+
+      totalDonasiUangEl.textContent = formatRupiah(sumUang);
+      totalDonasiMatrialEl.textContent = formatRupiah(sumMatrial);
+      totalPengeluaranEl.textContent = formatRupiah(sumOut);
+      sisaSaldoEl.textContent = formatRupiah(saldo);
+      countPemasukanEl.textContent = pemasukanRows.length;
+      countPengeluaranEl.textContent = pengeluaranRows.length;
+    }
+
+    function updateResultBanner(filtered, totalNominalFiltered, keyword, selectedJenis, selectedMonth) {
+      const hasSearch = keyword.length > 0;
+      const hasJenis = activeTab === "pemasukan" && Boolean(selectedJenis);
+      const hasMonth = Boolean(selectedMonth);
+
+      if (!hasSearch && !hasJenis && !hasMonth) {
+        resultBanner.classList.add("hidden");
+        return;
+      }
+
+      resultBanner.classList.remove("hidden");
+
+      const parts = [];
+      if (hasSearch) parts.push(`kata kunci "${searchInput.value.trim()}"`);
+      if (hasJenis) parts.push(`jenis "${selectedJenis}"`);
+      if (hasMonth) parts.push(`bulan ${formatMonthLabel(selectedMonth)}`);
+
+      resultBannerMain.textContent = `${formatRupiah(totalNominalFiltered)} (${filtered.length} baris)`;
+
+      if (hasMonth) {
+        const monthIn = pemasukanRows
+          .filter((r) => r.monthKey === selectedMonth)
+          .reduce((acc, r) => acc + r.nominalNum, 0);
+        const monthOut = pengeluaranRows
+          .filter((r) => r.monthKey === selectedMonth)
+          .reduce((acc, r) => acc + r.jumlahHargaNum, 0);
+        const monthNet = monthIn - monthOut;
+
+        resultBannerSub.textContent =
+          `${formatMonthLabel(selectedMonth)} · Masuk ${formatRupiah(monthIn)} · Keluar ${formatRupiah(monthOut)} · Selisih ${formatRupiah(monthNet)}`;
+      } else {
+        resultBannerSub.textContent = parts.join(" · ");
+      }
+    }
+
+    function renderActiveTable() {
+      const keyword = searchInput.value.trim().toLowerCase();
+      const selectedMonth = bulanFilter.value;
+
+      if (activeTab === "pemasukan") {
+        const selectedJenis = jenisFilter.value;
+        const filtered = pemasukanRows.filter((item) => {
+          const matchesJenis = !selectedJenis || item.jenis === selectedJenis;
+          const matchesMonth = !selectedMonth || item.monthKey === selectedMonth;
+          const searchable = [
+            item.nama,
+            item.jenis,
+            item.alamat,
+            item.namaBarang,
+            item.tanggal
+          ]
+            .join(" ")
+            .toLowerCase();
+          return matchesJenis && matchesMonth && (!keyword || searchable.includes(keyword));
+        });
+
+        const totalNominalFiltered = filtered.reduce((acc, item) => acc + item.nominalNum, 0);
+        updateResultBanner(filtered, totalNominalFiltered, keyword, selectedJenis, selectedMonth);
+
+        updatePagination(filtered.length);
+        const startIdx = (currentPage - 1) * ROWS_PER_PAGE;
+        const pageItems = filtered.slice(startIdx, startIdx + ROWS_PER_PAGE);
+
+        if (filtered.length === 0) {
+          statusText.textContent = `Menampilkan 0 dari ${pemasukanRows.length} data pemasukan.`;
+          donasiBody.innerHTML =
+            '<tr><td colspan="10" style="text-align:center; padding:18px;">Tidak ada data pemasukan yang cocok.</td></tr>';
+          return;
+        }
+
+        const endIdx = startIdx + pageItems.length;
+        statusText.textContent = `Menampilkan baris ${startIdx + 1}–${endIdx} dari ${filtered.length} data pemasukan.`;
+
+        donasiBody.innerHTML = pageItems
+          .map((item, i) => `
+            <tr>
+              <td>${startIdx + i + 1}</td>
+              <td>${escapeHTML(item.nama)}</td>
+              <td class="num">${item.nominalNum > 0 ? formatRupiah(item.nominalNum) : escapeHTML(item.nominalRaw)}</td>
+              <td>${escapeHTML(item.jenis)}</td>
+              <td>${escapeHTML(item.alamat)}</td>
+              <td>${escapeHTML(item.namaBarang)}</td>
+              <td>${escapeHTML(item.satuan)}</td>
+              <td class="num">${escapeHTML(item.volume)}</td>
+              <td class="num">${escapeHTML(item.hargaSatuan)}</td>
+              <td>${escapeHTML(item.tanggal)}</td>
+            </tr>
+          `)
+          .join("");
+      } else {
+        const filtered = pengeluaranRows.filter((item) => {
+          const matchesMonth = !selectedMonth || item.monthKey === selectedMonth;
+          const searchable = [
+            item.namaBarang,
+            item.satuan,
+            item.tanggal
+          ]
+            .join(" ")
+            .toLowerCase();
+          return matchesMonth && (!keyword || searchable.includes(keyword));
+        });
+
+        const totalNominalFiltered = filtered.reduce((acc, item) => acc + item.jumlahHargaNum, 0);
+        updateResultBanner(filtered, totalNominalFiltered, keyword, "", selectedMonth);
+
+        updatePagination(filtered.length);
+        const startIdx = (currentPage - 1) * ROWS_PER_PAGE;
+        const pageItems = filtered.slice(startIdx, startIdx + ROWS_PER_PAGE);
+
+        if (filtered.length === 0) {
+          statusText.textContent = `Menampilkan 0 dari ${pengeluaranRows.length} data pengeluaran.`;
+          pengeluaranBody.innerHTML =
+            '<tr><td colspan="7" style="text-align:center; padding:18px;">Tidak ada data pengeluaran yang cocok.</td></tr>';
+          return;
+        }
+
+        const endIdx = startIdx + pageItems.length;
+        statusText.textContent = `Menampilkan baris ${startIdx + 1}–${endIdx} dari ${filtered.length} data pengeluaran.`;
+
+        pengeluaranBody.innerHTML = pageItems
+          .map((item, i) => `
+            <tr>
+              <td>${startIdx + i + 1}</td>
+              <td>${escapeHTML(item.namaBarang)}</td>
+              <td>${escapeHTML(item.satuan)}</td>
+              <td class="num">${escapeHTML(item.volume)}</td>
+              <td class="num">${item.hargaSatuanNum > 0 ? formatRupiah(item.hargaSatuanNum) : escapeHTML(item.hargaSatuanRaw)}</td>
+              <td class="num">${item.jumlahHargaNum > 0 ? formatRupiah(item.jumlahHargaNum) : escapeHTML(item.jumlahHargaRaw)}</td>
+              <td>${escapeHTML(item.tanggal)}</td>
+            </tr>
+          `)
+          .join("");
+      }
+    }
+
+    function renderKebutuhanTerkini(rawRows) {
+      let headerIdx = rawRows.findIndex((cols) =>
+        cols.some((c) => c.toLowerCase().replace(/\s+/g, "") === "namabarang")
+      );
+
+      if (headerIdx === -1) {
+        headerIdx = 0;
+      } else if (headerIdx > 0) {
+        const titleCell = rawRows[0].find((c) => c.trim() !== "");
+        if (titleCell) {
+          kebutuhanSubtitleEl.textContent = titleCell.trim();
+        }
+      }
+
+      const items = rawRows
+        .slice(headerIdx + 1)
+        .filter((cols) => cols[0] && cols[0].trim() !== "")
+        .map((cols) => {
+          const namaBarang = cols[0] || "";
+          const satuan = cols[1] || "";
+          const volume = cols[2] || "";
+          const hargaSatuanNum = parseNumber(cols[3]);
+          const jumlahHargaNum = parseNumber(cols[4]);
+          const donasiMasukNum = parseNumber(cols[5]);
+
+          const persenRaw = jumlahHargaNum > 0 ? (donasiMasukNum / jumlahHargaNum) * 100 : 0;
+          const persenBulat = Math.round(persenRaw);
+          const barWidth = Math.min(100, Math.max(0, persenRaw));
+
+          return {
+            namaBarang,
+            satuan,
+            volume,
+            hargaSatuanNum,
+            jumlahHargaNum,
+            donasiMasukNum,
+            persenBulat,
+            barWidth
+          };
+        });
+
+      const totalButuh = items.reduce((acc, it) => acc + it.jumlahHargaNum, 0);
+      const totalMasuk = items.reduce((acc, it) => acc + it.donasiMasukNum, 0);
+      const totalPersen = totalButuh > 0 ? Math.round((totalMasuk / totalButuh) * 100) : 0;
+
+      totalKebutuhanRpEl.textContent = formatRupiah(totalButuh);
+      totalKebutuhanMasukEl.textContent = `${totalPersen}%`;
+      kebutuhanStatusEl.textContent = `Menampilkan ${items.length} item kebutuhan material terkini.`;
+
+      if (items.length === 0) {
+        kebutuhanBody.innerHTML =
+          '<tr><td colspan="4" style="text-align:center; padding:16px;">Belum ada data kebutuhan terkini.</td></tr>';
+        return;
+      }
+
+      kebutuhanBody.innerHTML = items
+        .map((it) => {
+          const jumlahText = `${escapeHTML(it.volume)} ${escapeHTML(it.satuan)}`.trim();
+          const nilaiText = it.jumlahHargaNum > 0 ? formatRupiah(it.jumlahHargaNum) : "-";
+          const masukSub = it.donasiMasukNum > 0 ? formatRupiah(it.donasiMasukNum) : "Belum ada";
+
+          return `
+            <tr>
+              <td><strong>${escapeHTML(it.namaBarang)}</strong></td>
+              <td style="white-space: nowrap;">${jumlahText}</td>
+              <td class="num">${nilaiText}</td>
+              <td class="pct-cell">
+                <div class="pct-header">
+                  <span>${it.persenBulat}%</span>
+                  <span class="pct-sub">${masukSub}</span>
+                </div>
+                <div class="mini-bar">
+                  <div class="mini-bar-fill" style="width: ${it.barWidth}%;"></div>
+                </div>
+              </td>
+            </tr>
+          `;
+        })
+        .join("");
+    }
+
+    function capitalizeFirst(str) {
+      const s = String(str || "").trim();
+      if (!s) return "";
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    function renderProgresPembangunan(rawRows) {
+      if (!Array.isArray(rawRows) || rawRows.length === 0) {
+        progresListEl.innerHTML =
+          '<div class="progres-box is-pending" style="grid-column: 1 / -1;"><div class="progres-box-val">Belum ada data progres.</div></div>';
+        return;
+      }
+
+      const nonEmptyRows = rawRows.filter((cols) =>
+        Array.isArray(cols) && cols.some((c) => String(c || "").trim() !== "")
+      );
+
+      if (nonEmptyRows.length === 0) {
+        progresListEl.innerHTML =
+          '<div class="progres-box is-pending" style="grid-column: 1 / -1;"><div class="progres-box-val">Belum ada data progres.</div></div>';
+        return;
+      }
+
+      const headerKeywords = [
+        "progres pembangunan", "pekerjaan", "uraian", "item",
+        "kegiatan", "nama", "status", "persentase", "persen", "progres"
+      ];
+
+      let startIdx = 0;
+      const detectedHeaderIdx = nonEmptyRows.findIndex((cols) => {
+        const joined = cols.map((c) => String(c || "").trim().toLowerCase()).join(" ");
+        const hasNameCol = /\b(pekerjaan|uraian|item|kegiatan|tahap|bagian|progres)\b/.test(joined);
+        const hasStatusCol = /\b(status|persentase|persen|capaian|progres|keterangan)\b/.test(joined);
+        return hasNameCol && hasStatusCol;
+      });
+
+      if (detectedHeaderIdx !== -1) {
+        startIdx = detectedHeaderIdx + 1;
+      }
+
+      const looksLikeStatusOrPct = (val) => {
+        if (!val) return false;
+        const low = val.toLowerCase();
+        return (
+          val.includes("%") ||
+          /^\d+([.,]\d+)?\s*%?$/.test(val) ||
+          low.includes("selesai") ||
+          low.includes("proses") ||
+          low.includes("progress") ||
+          low.includes("belum") ||
+          low.includes("rencana") ||
+          low.includes("on going") ||
+          low.includes("ongoing")
+        );
+      };
+
+      const entries = [];
+
+      for (let i = startIdx; i < nonEmptyRows.length; i++) {
+        const cols = nonEmptyRows[i].map((c) => String(c || "").trim());
+        const nonBlankCells = cols.filter((c) => c !== "");
+        if (nonBlankCells.length === 0) continue;
+
+        if (
+          nonBlankCells.length === 1 &&
+          headerKeywords.includes(nonBlankCells[0].toLowerCase())
+        ) {
+          continue;
+        }
+
+        let nama = "";
+        let nilai = "";
+
+        const statusIdx = cols.findIndex((c, idx) => idx > 0 && looksLikeStatusOrPct(c));
+
+        if (statusIdx !== -1) {
+          nilai = cols[statusIdx];
+          const candidatesBefore = [cols[1], cols[0], ...cols.slice(0, statusIdx)].filter(
+            (v) => v && v !== nilai && !/^\d+$/.test(v)
+          );
+          nama = candidatesBefore[0] || "";
+        } else {
+          nama = cols[1] || cols[0] || "";
+          nilai = cols[4] || "";
+
+          if (!nama || !nilai) {
+            const pair = cols.filter((c) => c !== "" && !/^\d+$/.test(c));
+            if (!nama && pair[0]) nama = pair[0];
+            if (!nilai && pair[1]) nilai = pair[1];
+          }
+        }
+
+        if (
+          !nama ||
+          !nilai ||
+          (headerKeywords.includes(nama.toLowerCase()) && headerKeywords.includes(nilai.toLowerCase()))
+        ) {
+          continue;
+        }
+
+        let nilaiFormatted = nilai;
+        if (/^0?\.\d+$/.test(nilai)) {
+          const pctFromDec = Math.round(parseFloat(nilai) * 100);
+          nilaiFormatted = `${pctFromDec}%`;
+        } else if (/^\d+([.,]\d+)?$/.test(nilai)) {
+          nilaiFormatted = `${nilai.replace(".", ",")}%`;
+        }
+
+        const lowerVal = nilaiFormatted.toLowerCase();
+        let stateClass = "is-pending";
+
+        if (nilaiFormatted.includes("%")) {
+          const num = parseFloat(nilaiFormatted.replace(/[^0-9.,-]/g, "").replace(",", "."));
+          if (Number.isFinite(num)) {
+            stateClass = num >= 100 ? "" : num > 0 ? "is-process" : "is-pending";
+          }
+        } else if (lowerVal.includes("selesai") || lowerVal.includes("100%")) {
+          stateClass = "";
+        } else if (
+          lowerVal.includes("proses") ||
+          lowerVal.includes("progress") ||
+          lowerVal.includes("berjalan") ||
+          lowerVal.includes("on going") ||
+          lowerVal.includes("ongoing")
+        ) {
+          stateClass = "is-process";
+        }
+
+        const namaKapital = capitalizeFirst(nama);
+        const nilaiKapital = capitalizeFirst(nilaiFormatted);
+        const isDakAtapDalamProses =
+          namaKapital.toLowerCase().includes("dak atap") &&
+          nilaiKapital.toLowerCase().includes("dalam proses");
+
+        entries.push({
+          nama: namaKapital,
+          nilai: nilaiKapital,
+          stateClass,
+          imgSrc: getProgresImage(namaKapital),
+          linkToKebutuhan: isDakAtapDalamProses
+        });
+      }
+
+      if (entries.length === 0) {
+        progresListEl.innerHTML =
+          '<div class="progres-box is-pending" style="grid-column: 1 / -1;"><div class="progres-box-val">Belum ada data progres.</div></div>';
+        return;
+      }
+
+      progresListEl.innerHTML = entries
+        .map((item) => {
+          const imgHtml = item.imgSrc
+            ? `<img class="progres-img" src="${escapeHTML(item.imgSrc)}" alt="Foto ${escapeHTML(item.nama)}" onclick="openImgModal(event, '${escapeHTML(item.imgSrc)}', '${escapeHTML(item.nama)} — ${escapeHTML(item.nilai)}')" onerror="this.style.display='none'">`
+            : "";
+
+          const boxClickAttr = item.linkToKebutuhan
+            ? ` onclick="goToKebutuhanTerkini()" title="Klik untuk melihat Kebutuhan Terkini"`
+            : "";
+
+          const boxExtraClass = item.linkToKebutuhan ? " is-linkable" : "";
+
+          return `
+            <div class="progres-box ${item.stateClass}${boxExtraClass}"${boxClickAttr}>
+              <div>
+                <div class="progres-box-title">${escapeHTML(item.nama)}</div>
+                <div class="progres-box-val">${escapeHTML(item.nilai)}</div>
+              </div>
+              ${imgHtml}
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    async function loadDataKeuangan() {
+      try {
+        const [resIn, resOut, resKebutuhan, resProgres] = await Promise.all([
+          fetch(PEMASUKAN_CSV_URL),
+          fetch(PENGELUARAN_CSV_URL),
+          fetch(KEBUTUHAN_CSV_URL),
+          fetch(PROGRES_CSV_URL)
+        ]);
+
+        if (!resIn.ok || !resOut.ok || !resKebutuhan.ok || !resProgres.ok) {
+          throw new Error("Gagal mengambil data dari Google Sheets.");
+        }
+
+        const [csvIn, csvOut, csvKebutuhan, csvProgres] = await Promise.all([
+          resIn.text(),
+          resOut.text(),
+          resKebutuhan.text(),
+          resProgres.text()
+        ]);
+
+        pemasukanRows = parseCSV(csvIn)
+          .slice(1)
+          .filter((cols) => cols.some((cell) => cell !== ""))
+          .map((cols) => {
+            const tanggal = cols[8] || "";
+            return {
+              nama: cols[0] || "",
+              nominalRaw: cols[1] || "",
+              nominalNum: parseNumber(cols[1]),
+              jenis: cols[2] || "",
+              alamat: cols[3] || "",
+              namaBarang: cols[4] || "",
+              satuan: cols[5] || "",
+              volume: cols[6] || "",
+              hargaSatuan: cols[7] || "",
+              tanggal,
+              monthKey: extractMonthKey(tanggal)
+            };
+          });
+
+        pengeluaranRows = parseCSV(csvOut)
+          .slice(1)
+          .filter((cols) => cols.some((cell) => cell !== ""))
+          .map((cols) => {
+            const tanggal = cols[5] || "";
+            return {
+              namaBarang: cols[0] || "",
+              satuan: cols[1] || "",
+              volume: cols[2] || "",
+              hargaSatuanRaw: cols[3] || "",
+              hargaSatuanNum: parseNumber(cols[3]),
+              jumlahHargaRaw: cols[4] || "",
+              jumlahHargaNum: parseNumber(cols[4]),
+              tanggal,
+              monthKey: extractMonthKey(tanggal)
+            };
+          });
+
+        populateJenisFilter(pemasukanRows);
+        populateBulanFilter();
+        updateSummaryCards();
+        renderActiveTable();
+        renderKebutuhanTerkini(parseCSV(csvKebutuhan));
+        renderProgresPembangunan(parseCSV(csvProgres));
+      } catch (err) {
+        statusText.textContent = "Terjadi kesalahan: " + err.message;
+        kebutuhanStatusEl.textContent = "Terjadi kesalahan memuat data kebutuhan.";
+        progresListEl.innerHTML =
+          '<div class="progres-box is-pending" style="grid-column: 1 / -1;"><div class="progres-box-val">Gagal memuat data progres.</div></div>';
+      }
+    }
+
+    searchInput.addEventListener("input", () => {
+      currentPage = 1;
+      renderActiveTable();
+    });
+
+    jenisFilter.addEventListener("change", () => {
+      currentPage = 1;
+      renderActiveTable();
+    });
+
+    bulanFilter.addEventListener("change", () => {
+      currentPage = 1;
+      renderActiveTable();
+    });
+
+    renderGaleriDokumentasi();
+    loadDataKeuangan();
+  </script>
+
+</body>
+</html>
