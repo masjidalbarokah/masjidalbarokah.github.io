@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="id">
-<head><link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#198754">
-
+<head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f3f22">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Masjid Al-Barokah Tanjungkerta</title>
   <style>
     :root {
-      --bg: #0f3f22;
+      --bg: #f1f5f9;
       --surface: #ffffff;
       --primary: #14532d;
       --primary-dark: #0f3f22;
       --primary-light: #dcfce7;
+      --accent: #16a34a;
       --danger-bg: #fef2f2;
       --danger-text: #991b1b;
       --info-bg: #f0fdf4;
@@ -20,200 +22,566 @@
       --warn-bg: #fefce8;
       --warn-text: #854d0e;
       --warn-border: #fde047;
-      --text: #1f2937;
-      --muted: #4b5563;
-      --border: #e5e7eb;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 6px 18px rgba(15, 23, 42, 0.09);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background-color: var(--bg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #e2e8f0;
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.5;
       width: 100%;
+      overflow-x: hidden;
     }
 
-    /* Navbar Mengambang di Paling Atas Saat Scroll */
-    nav {
-      background-color: var(--primary-dark);
+    /* Bingkai Utama Gaya Aplikasi Ponsel */
+    .app-shell {
+      max-width: 540px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background-color: var(--bg);
+      position: relative;
+      padding-bottom: 84px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.12);
+    }
+
+    /* App Top Bar */
+    .app-topbar {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #ffffff;
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       position: sticky;
       top: 0;
-      z-index: 200;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-      width: 100%;
+      z-index: 150;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     }
 
-    .nav-container {
-      max-width: 820px;
-      margin: 0 auto;
-      padding: 0.6rem 1rem;
+    .topbar-brand {
       display: flex;
-      flex-wrap: nowrap;
       align-items: center;
-      justify-content: flex-start;
       gap: 0.65rem;
-      overflow-x: auto;
-      scrollbar-width: none;
     }
 
-    .nav-container::-webkit-scrollbar {
-      display: none;
-    }
-
-    .nav-logo {
+    .topbar-logo {
+      width: 38px;
+      height: 38px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 3px;
       display: flex;
       align-items: center;
-      background-color: #ffffff;
-      padding: 4px;
-      border-radius: 8px;
+      justify-content: center;
       flex-shrink: 0;
     }
 
-    .nav-logo img {
-      height: 36px;
-      width: auto;
-      display: block;
+    .topbar-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
-    .nav-links {
-      display: flex;
-      flex-wrap: nowrap;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 0.25rem;
+    .topbar-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .topbar-sub {
+      font-size: 0.72rem;
+      opacity: 0.85;
+    }
+
+    .topbar-badge {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.28rem 0.6rem;
+      border-radius: 999px;
       white-space: nowrap;
     }
 
-    .nav-links a {
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 500;
-      padding: 0.4rem 0.6rem;
-      border-radius: 6px;
-      transition: background-color 0.2s;
+    /* Halaman Tab (View) */
+    .app-view {
+      display: none;
+      padding: 0.9rem;
+      animation: fadeSlideIn 0.22s ease;
     }
 
-    .nav-links a:hover,
-    .nav-links a:focus {
-      background-color: var(--primary);
+    .app-view.active {
+      display: block;
     }
 
-    /* Header */
-    header {
-      background-color: var(--primary);
-      color: #ffffff;
-      padding: 2rem 1.25rem;
-      text-align: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    header h1 {
-      font-size: 1.75rem;
-      margin-bottom: 0.4rem;
-    }
-
-    header p {
-      font-size: 0.95rem;
-      opacity: 0.9;
-    }
-
-    /* Konten Utama */
-    main {
-      max-width: 820px;
-      width: 100%;
-      margin: 1.5rem auto;
-      padding: 0 1rem;
-      display: grid;
-      gap: 1.25rem;
-    }
-
-    section {
-      background-color: var(--surface);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
-      border-radius: 12px;
-      padding: 1.25rem;
-      scroll-margin-top: 4.5rem;
-      min-width: 0;
-    }
-
-    h2 {
-      font-size: 1.2rem;
-      color: var(--primary);
-      margin-bottom: 0.75rem;
-      border-bottom: 2px solid var(--primary-light);
-      padding-bottom: 0.35rem;
-    }
-
-    .arab-bismillah {
-      font-size: 1.35rem;
-      text-align: center;
-      margin-bottom: 0.75rem;
-      line-height: 1.9;
-    }
-
-    .profil-paragraf {
-      margin-bottom: 0.75rem;
-    }
-
-    /* Kotak Donasi */
-    .donasi-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-      margin-top: 0.75rem;
-    }
-
-    @media (min-width: 640px) {
-      .donasi-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
-    .donasi-box {
-      background-color: var(--primary-light);
-      border-radius: 10px;
-      padding: 1rem;
-      min-width: 0;
-    }
-
-    .qris-box {
+    /* Bar Pencarian Donatur di Atas Sisa Saldo Kas */
+    .home-search-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
       background-color: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1rem;
-      text-align: center;
+      border-radius: 14px;
+      padding: 0.35rem 0.4rem 0.35rem 0.75rem;
+      margin-bottom: 0.7rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .home-search-bar svg {
+      width: 18px;
+      height: 18px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .home-search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 0.86rem;
+      color: var(--text);
       min-width: 0;
     }
 
-    /* Ringkasan Keuangan: 2 Kolom Sejajar per Baris, Nominal 1 Baris */
-    .transparansi-summary {
+    .home-search-bar input:focus {
+      outline: none;
+    }
+
+    .home-search-btn {
+      background-color: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.48rem 0.8rem;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background-color 0.2s;
+    }
+
+    .home-search-btn:active {
+      background-color: var(--primary-dark);
+    }
+
+    .home-reset-btn {
+      background-color: #f1f5f9;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.46rem 0.65rem;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Panel Hasil Pencarian Donatur Mandiri */
+    .donor-result-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 0.95rem;
+      margin-bottom: 0.85rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .donor-total-box {
+      background-color: var(--info-bg);
+      border: 1px solid var(--info-border);
+      border-radius: 12px;
+      padding: 0.7rem 0.85rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .donor-total-label {
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .donor-total-amount {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 0.1rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .donor-total-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    .item-qty-sub {
+      display: block;
+      font-size: 0.74rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 0.08rem;
+    }
+
+    .donor-footnote {
+      margin-top: 0.65rem;
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .donor-footnote button {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-family: inherit;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    /* Hero Wallet Card di Beranda */
+    .hero-wallet {
+      background: linear-gradient(145deg, var(--primary-dark) 0%, #166534 100%);
+      color: #ffffff;
+      border-radius: 18px;
+      padding: 1.15rem;
+      box-shadow: 0 10px 24px rgba(20, 83, 45, 0.25);
+      margin-bottom: 0.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-wallet::after {
+      content: "";
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 50%;
+      top: -40px;
+      right: -30px;
+    }
+
+    .wallet-label {
+      font-size: 0.76rem;
+      opacity: 0.88;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .wallet-saldo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin: 0.2rem 0 0.8rem;
+      letter-spacing: -0.5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .wallet-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      padding: 0.6rem;
+    }
+
+    .w-stat-item {
+      min-width: 0;
+    }
+
+    .w-stat-lbl {
+      font-size: 0.68rem;
+      opacity: 0.82;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .w-stat-val {
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-top: 0.1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Kartu Capaian Donasi Ramping */
+    .compact-target-card {
+      padding: 0.85rem 0.95rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .compact-target-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .compact-target-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .compact-target-pct {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .target-progress-track {
+      width: 100%;
+      height: 7px;
+      background-color: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 0.42rem;
+    }
+
+    .target-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+      border-radius: 999px;
+      transition: width 0.35s ease;
+    }
+
+    .compact-target-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .compact-target-meta strong {
+      color: var(--text);
+    }
+
+    /* App Card Standard */
+    .app-card {
+      background-color: var(--surface);
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      margin-bottom: 0.8rem;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .compact-action-card {
+      padding: 0.75rem 0.95rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .compact-action-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+    }
+
+    .trigger-pembangunan-btn {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      border: 1.5px solid #86efac;
+      border-radius: 10px;
+      padding: 0.42rem 0.8rem;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .trigger-pembangunan-btn.expanded {
+      background-color: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .profil-detail-wrap {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .arab-bismillah {
+      font-size: 1.25rem;
+      text-align: center;
+      margin: 0.2rem 0 0.75rem;
+      color: var(--primary-dark);
+      line-height: 1.8;
+    }
+
+    .profil-section-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0.85rem 0 0.35rem;
+    }
+
+    .profil-paragraf {
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-bottom: 0.55rem;
+    }
+
+    .profil-list {
+      padding-left: 1.15rem;
+      margin-bottom: 0.65rem;
+      font-size: 0.84rem;
+      color: var(--text);
+    }
+
+    .profil-list li {
+      margin-bottom: 0.3rem;
+    }
+
+    .profil-info-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0.5rem;
-      margin-top: 0.75rem;
-      margin-bottom: 0.9rem;
+      margin: 0.55rem 0 0.75rem;
+    }
+
+    .profil-info-box {
+      background-color: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.55rem 0.65rem;
+    }
+
+    .profil-info-lbl {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .profil-info-val {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 0.1rem;
+    }
+
+    /* Rincian RAB Lengkap */
+    .rab-group-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--primary);
+      background-color: var(--info-bg);
+      border: 1px solid var(--info-border);
+      border-radius: 8px;
+      padding: 0.4rem 0.65rem;
+      margin: 0.75rem 0 0.35rem;
+    }
+
+    .rab-full-table {
+      width: 100%;
+      min-width: 440px;
+      border-collapse: collapse;
+      font-size: 0.76rem;
+    }
+
+    .rab-full-table th,
+    .rab-full-table td {
+      padding: 0.42rem 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rab-full-table tr.rab-subtotal-row td {
+      background-color: #f8fafc;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .rab-rekap-table {
+      width: 100%;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      margin-top: 0.45rem;
+    }
+
+    .rab-rekap-table th,
+    .rab-rekap-table td {
+      padding: 0.45rem 0.55rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rab-rekap-table tr.rab-grand-row td {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    /* Ringkasan Keuangan */
+    .transparansi-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+      margin-bottom: 0.85rem;
     }
 
     .summary-card {
-      background-color: #f4f7f5;
+      background-color: #f8fafc;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.7rem 0.65rem;
+      border-radius: 12px;
+      padding: 0.7rem;
       min-width: 0;
-      overflow: hidden;
     }
 
     .summary-card.pengeluaran-card {
@@ -227,122 +595,135 @@
     }
 
     .summary-label {
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       color: var(--muted);
-      line-height: 1.25;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .summary-value {
-      font-size: clamp(0.76rem, 3.1vw, 1.05rem);
+      font-size: 0.95rem;
       font-weight: 700;
       color: var(--primary);
-      margin-top: 0.25rem;
+      margin-top: 0.2rem;
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
-      letter-spacing: -0.2px;
     }
 
     .pengeluaran-card .summary-value {
       color: var(--danger-text);
     }
 
-    /* Tab Pemasukan vs Pengeluaran */
-    .tab-buttons {
+    /* Segmented Control (Tab Pemasukan vs Pengeluaran) */
+    .segmented-control {
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
+      background-color: #e2e8f0;
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 0.85rem;
     }
 
-    .tab-btn {
+    .seg-btn {
       flex: 1;
-      padding: 0.6rem 0.75rem;
-      border-radius: 8px;
-      border: 1.5px solid var(--border);
-      background-color: #f4f7f5;
-      color: var(--text);
+      padding: 0.55rem 0.5rem;
+      border: none;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--muted);
       font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 0.84rem;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
     }
 
-    .tab-btn.active {
-      background-color: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
+    .seg-btn.active {
+      background-color: #ffffff;
+      color: var(--primary);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
 
-    /* Toolbar Filter & Pencarian */
+    /* Filter & Pencarian */
     .transparansi-toolbar {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      margin-bottom: 0.65rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .transparansi-toolbar input {
+      grid-column: 1 / -1;
     }
 
     .transparansi-toolbar input,
     .transparansi-toolbar select {
       width: 100%;
       font-family: inherit;
-      font-size: 0.9rem;
-      padding: 0.55rem 0.75rem;
+      font-size: 0.86rem;
+      padding: 0.6rem 0.75rem;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      background-color: var(--surface);
+      border-radius: 10px;
+      background-color: #f8fafc;
       color: var(--text);
-      max-width: 100%;
     }
 
-    /* Kotak Ringkasan Pencarian / Arus Bulanan */
+    .transparansi-toolbar input:focus,
+    .transparansi-toolbar select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background-color: #ffffff;
+    }
+
     .result-banner {
       background-color: var(--info-bg);
       border: 1px solid var(--info-border);
       border-radius: 10px;
-      padding: 0.75rem 0.9rem;
+      padding: 0.65rem 0.8rem;
       margin-bottom: 0.65rem;
-      font-size: 0.88rem;
-      color: var(--text);
+      font-size: 0.84rem;
     }
 
     .result-banner-main {
       font-weight: 700;
       color: var(--primary);
-      margin-bottom: 0.2rem;
     }
 
     .result-banner-sub {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: var(--muted);
+      margin-top: 0.15rem;
     }
 
     .transparansi-status {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--muted);
       margin-bottom: 0.5rem;
     }
 
-    /* Tabel Transparansi & Kebutuhan Terkini */
+    /* Tabel Responsif */
     .table-wrap {
       width: 100%;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      margin-top: 0.25rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.86rem;
-      min-width: 560px;
+      font-size: 0.82rem;
+      min-width: 520px;
+    }
+
+    .donor-summary-table {
+      min-width: 100%;
     }
 
     th, td {
       text-align: left;
-      padding: 0.6rem 0.65rem;
+      padding: 0.55rem 0.6rem;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
     }
@@ -351,6 +732,7 @@
       background-color: var(--primary-light);
       color: var(--primary);
       white-space: nowrap;
+      font-weight: 700;
     }
 
     .num {
@@ -360,41 +742,67 @@
     }
 
     .hidden {
-      display: none;
+      display: none !important;
     }
 
-    /* Tombol Toggle & Badge Persentase Kebutuhan Terkini */
+    /* Paginasi */
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .page-btn {
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.45rem 0.75rem;
+      border-radius: 10px;
+      border: 1.5px solid var(--primary);
+      background-color: #ffffff;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .page-btn:disabled {
+      border-color: var(--border);
+      color: #94a3b8;
+      background-color: #f8fafc;
+      cursor: not-allowed;
+    }
+
+    .page-info {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    /* Kebutuhan Terkini */
     .kebutuhan-subtitle {
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       font-weight: 600;
       color: var(--primary);
       background-color: var(--info-bg);
       border: 1px solid var(--info-border);
       padding: 0.55rem 0.75rem;
-      border-radius: 8px;
-      margin-bottom: 0.75rem;
-    }
-
-    .kebutuhan-summary-row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.5rem;
+      border-radius: 10px;
       margin-bottom: 0.75rem;
     }
 
     .toggle-kebutuhan-btn {
       width: 100%;
-      padding: 0.68rem 1rem;
-      border-radius: 8px;
+      padding: 0.65rem 1rem;
+      border-radius: 12px;
       border: 1.5px solid var(--primary);
       background-color: var(--primary);
       color: #ffffff;
       font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 0.86rem;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.35rem;
     }
 
     .toggle-kebutuhan-btn.expanded {
@@ -402,33 +810,28 @@
       color: var(--primary);
     }
 
-    .kebutuhan-panel {
-      margin-top: 0.35rem;
-    }
-
     .pct-cell {
-      min-width: 110px;
+      min-width: 105px;
     }
 
     .pct-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       font-weight: 700;
-      font-size: 0.84rem;
+      font-size: 0.8rem;
       color: var(--primary);
-      margin-bottom: 0.22rem;
+      margin-bottom: 0.2rem;
     }
 
     .pct-sub {
       font-weight: 400;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--muted);
     }
 
     .mini-bar {
       width: 100%;
-      height: 7px;
+      height: 6px;
       background-color: var(--border);
       border-radius: 999px;
       overflow: hidden;
@@ -438,91 +841,20 @@
       height: 100%;
       background-color: var(--primary);
       border-radius: 999px;
-      transition: width 0.3s ease;
     }
 
-    .cta-kebutuhan {
-      margin-top: 0.85rem;
-      padding: 0.75rem 0.85rem;
-      background-color: var(--primary-light);
-      border-radius: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.6rem;
-      font-size: 0.85rem;
-    }
-
-    .cta-kebutuhan a {
-      background-color: var(--primary);
-      color: #ffffff;
-      text-decoration: none;
-      font-weight: 600;
-      padding: 0.45rem 0.85rem;
-      border-radius: 8px;
-      white-space: nowrap;
-    }
-
-    /* Paginasi Tabel */
-    .pagination-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-      margin-top: 0.85rem;
-      padding-top: 0.65rem;
-      border-top: 1px solid var(--border);
-      flex-wrap: wrap;
-    }
-
-    .page-btn {
-      font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 600;
-      padding: 0.5rem 0.85rem;
-      border-radius: 8px;
-      border: 1.5px solid var(--primary);
-      background-color: #ffffff;
-      color: var(--primary);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .page-btn:hover:not(:disabled) {
-      background-color: var(--primary);
-      color: #ffffff;
-    }
-
-    .page-btn:disabled {
-      border-color: var(--border);
-      color: #9ca3af;
-      background-color: #f4f7f5;
-      cursor: not-allowed;
-    }
-
-    .page-info {
-      font-size: 0.86rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-align: center;
-      flex: 1 1 120px;
-    }
-
-    /* Progres pembangunan: Gaya Kartu ala Donasi Terkumpul (Persen/Status di Bawah) */
+    /* Progres Pembangunan */
     .progres-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.55rem;
-      margin-top: 0.4rem;
+      gap: 0.65rem;
     }
 
     .progres-box {
       background-color: var(--primary-light);
       border: 1px solid #bbf7d0;
-      border-radius: 10px;
-      padding: 0.7rem 0.75rem;
-      min-width: 0;
+      border-radius: 14px;
+      padding: 0.75rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -534,33 +866,26 @@
     }
 
     .progres-box.is-pending {
-      background-color: #f4f7f5;
+      background-color: #f8fafc;
       border-color: var(--border);
     }
 
     .progres-box.is-linkable {
       cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .progres-box.is-linkable:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
     }
 
     .progres-box-title {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--muted);
       line-height: 1.3;
     }
 
     .progres-box-val {
-      font-size: 1.05rem;
-      font-weight: 700;
+      font-size: 0.98rem;
+      font-weight: 800;
       color: var(--primary);
-      margin-top: 0.3rem;
-      line-height: 1.25;
+      margin-top: 0.25rem;
     }
 
     .progres-box.is-process .progres-box-val {
@@ -575,110 +900,43 @@
       width: 100%;
       aspect-ratio: 4 / 3;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 10px;
       margin-top: 0.55rem;
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      background-color: #ffffff;
       cursor: zoom-in;
       display: block;
-    }
-
-    /* Lightbox untuk melihat gambar lebih jelas */
-    .img-modal {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.78);
-      z-index: 400;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    .img-modal.hidden {
-      display: none;
-    }
-
-    .img-modal-card {
-      background-color: var(--surface);
-      border-radius: 12px;
-      padding: 0.85rem;
-      max-width: 540px;
-      width: 100%;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    }
-
-    .img-modal-card img {
-      width: 100%;
-      max-height: 70vh;
-      object-fit: contain;
-      border-radius: 8px;
-      display: block;
-      background-color: #f4f7f5;
-    }
-
-    .img-modal-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      margin-top: 0.65rem;
-    }
-
-    .img-modal-caption {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .img-modal-close {
-      background-color: var(--primary);
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.45rem 0.85rem;
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
     }
 
     /* Galeri */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.75rem;
-      margin-top: 0.5rem;
+      gap: 0.65rem;
     }
 
     .gallery-item {
       position: relative;
       overflow: hidden;
-      background-color: #f4f7f5;
+      background-color: #f8fafc;
       border: 1px dashed var(--muted);
-      border-radius: 8px;
+      border-radius: 14px;
       aspect-ratio: 4 / 3;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 0.5rem;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--muted);
-      min-width: 0;
       cursor: pointer;
     }
 
     .gallery-item.has-photo {
       border: 1px solid var(--border);
-      padding: 0;
     }
 
     .gallery-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 8px;
       display: block;
     }
 
@@ -687,13 +945,12 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(15, 63, 34, 0.84);
+      background: linear-gradient(transparent, rgba(15, 63, 34, 0.9));
       color: #ffffff;
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 600;
-      padding: 0.3rem 0.45rem;
+      padding: 0.65rem 0.45rem 0.35rem;
       text-align: center;
-      line-height: 1.25;
     }
 
     .gallery-item:not(.has-photo) .gallery-caption {
@@ -703,249 +960,810 @@
       padding: 0.4rem;
     }
 
-    footer {
-      text-align: center;
-      padding: 1.5rem 1rem;
+    /* Halaman Donasi */
+    .bank-card {
+      background: linear-gradient(135deg, #064e3b, #14532d);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 1.15rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .rek-number {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin: 0.35rem 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .copy-btn {
+      background-color: #ffffff;
+      color: var(--primary);
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      font-weight: 700;
       font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.82);
+      cursor: pointer;
+      margin-top: 0.65rem;
+      width: 100%;
+    }
+
+    .qris-box {
+      background-color: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.1rem;
+      text-align: center;
+    }
+
+    /* Bottom Navigation Bar (App Style) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 540px;
+      height: 68px;
+      background-color: #ffffff;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: center;
+      z-index: 300;
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .bnav-item {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.68rem;
+      font-weight: 600;
+      cursor: pointer;
+      height: 100%;
+      position: relative;
+      transition: color 0.2s;
+    }
+
+    .bnav-item svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 2;
+      transition: transform 0.2s;
+    }
+
+    .bnav-item.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .bnav-item.active svg {
+      transform: translateY(-2px);
+    }
+
+    .bnav-item.active::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 28px;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 0 0 4px 4px;
+    }
+
+    /* Tombol Donasi Menonjol di Tengah */
+    .bnav-donate {
+      color: var(--primary);
+    }
+
+    .bnav-donate-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -18px;
+      box-shadow: 0 4px 12px rgba(20, 83, 45, 0.35);
+      border: 3px solid #ffffff;
+    }
+
+    /* Lightbox Modal */
+    .img-modal {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.85);
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .img-modal-card {
+      background-color: var(--surface);
+      border-radius: 16px;
+      padding: 0.85rem;
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .img-modal-card img {
+      width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+      background-color: #f8fafc;
+    }
+
+    .img-modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .img-modal-caption {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .img-modal-close {
+      background-color: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.5rem 0.9rem;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <div class="nav-container">
-      <a href="#profil" class="nav-logo">
-        <img src="logo-masjid.jpg" alt="Logo Masjid Al-Barokah Tanjungkerta">
-      </a>
-      <div class="nav-links">
-        <a href="#profil">Profil</a>
-        <a href="#donasi">Donasi</a>
-        <a href="#transparansi">Transparansi</a>
-        <a href="#kebutuhan">Kebutuhan Terkini</a>
-        <a href="#progres">Progres</a>
-        <a href="#gallery">Galeri</a>
+  <div class="app-shell">
+    <!-- App Top Header -->
+    <header class="app-topbar">
+      <div class="topbar-brand">
+        <div class="topbar-logo">
+          <img src="logo-masjid.jpg" alt="Logo Masjid">
+        </div>
+        <div>
+          <div class="topbar-title">Masjid Al-Barokah</div>
+          <div class="topbar-sub">Tanjungkerta &bull; Renovasi Total</div>
+        </div>
       </div>
-    </div>
-  </nav>
+      <span class="topbar-badge">Live Data</span>
+    </header>
 
-  <header>
-    <h1>Masjid Al-Barokah Tanjungkerta</h1>
-    <p>Pusat Ibadah, Dakwah, dan Kegiatan Sosial Masyarakat</p>
-  </header>
+    <!-- TAB 1: BERANDA (DASHBOARD) -->
+    <div id="view-beranda" class="app-view active">
+      <!-- Pencarian Nama Donatur Mandiri di Atas Sisa Saldo Kas -->
+      <form class="home-search-bar" onsubmit="cariDonaturDariBeranda(event)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path stroke-linecap="round" d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input type="search" id="homeDonorSearch" placeholder="Cari nama donatur..." oninput="handleHomeDonorInput()">
+        <button type="submit" class="home-search-btn">Cari</button>
+        <button type="button" class="home-reset-btn hidden" id="homeDonorResetBtn" onclick="resetHomeDonorSearch()">Reset</button>
+      </form>
 
-  <main>
-    <section id="profil">
-      <h2>Profil Masjid</h2>
-      <p class="arab-bismillah" dir="rtl" lang="ar">
-        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-      </p>
-      <p class="profil-paragraf">
-        Selama 36 tahun berdiri, masjid ini telah menjadi pusat ibadah harian, pembinaan generasi muda,
-        serta ruang kebersamaan warga sekitar.
-      </p>
-      <p>
-        Kondisi bangunan masjid sudah menua dan membutuhkan pembaruan menyeluruh agar tetap aman, nyaman,
-        dan memadai untuk menampung jamaah yang terus bertambah. Oleh karena itu, panitia dan warga
-        bersepakat melaksanakan <strong>rehab total</strong> demi menghadirkan fasilitas ibadah yang lebih
-        kokoh dan representatif bagi generasi mendatang.
-      </p>
-    </section>
+      <!-- Panel Hasil Pencarian Donatur Mandiri -->
+      <div class="donor-result-card hidden" id="homeDonorResultCard">
+        <div class="donor-total-box">
+          <div class="donor-total-label">Total Didonasikan</div>
+          <div class="donor-total-amount" id="homeDonorTotal">Rp 0</div>
+          <div class="donor-total-meta" id="homeDonorMeta"></div>
+        </div>
 
-    <section id="donasi">
-      <h2>Donasi Pembangunan</h2>
-      <p>
-        Salurkan infak dan wakaf terbaik Anda untuk mendukung pembangunan dan kemakmuran Masjid Al-Barokah.
-      </p>
+        <div class="transparansi-status" id="homeDonorStatus"></div>
 
-      <div class="donasi-grid">
-        <!-- Transfer Bank -->
-        <div class="donasi-box">
-          <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 0.2rem;">Transfer Bank Resmi:</p>
-          <p style="font-size: 1.05rem; font-weight: 700; color: var(--primary);">BANK MANDIRI</p>
-          <p id="no-rek" style="font-size: 1.25rem; font-weight: 700; letter-spacing: 0.5px; margin: 0.2rem 0;">1340031912743</p>
-          <p style="margin-bottom: 0.75rem;"><strong>a.n. DULKARIM (Bendahara)</strong></p>
-          <button type="button" onclick="salinRekening(this)" style="background-color: #ffffff; color: var(--primary); border: 1.5px solid var(--primary); padding: 0.65rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer;">
-            Salin No. Rekening
+        <div class="table-wrap">
+          <table class="donor-summary-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th class="num">Nominal</th>
+                <th>Jenis Donasi</th>
+                <th>Nama Barang</th>
+              </tr>
+            </thead>
+            <tbody id="homeDonorBody"></tbody>
+          </table>
+        </div>
+
+        <div class="pagination-bar" id="homeDonorPagination">
+          <button type="button" class="page-btn" id="homeDonorPrevBtn" onclick="changeDonorPage(-1)" disabled>
+            &larr; Sebelumnya
+          </button>
+          <span class="page-info" id="homeDonorPageInfo">Hal 1 / 1</span>
+          <button type="button" class="page-btn" id="homeDonorNextBtn" onclick="changeDonorPage(1)" disabled>
+            Berikutnya &rarr;
           </button>
         </div>
 
-        <!-- Donasi Cepat QRIS -->
-        <div class="qris-box">
-          <p style="font-size: 0.9rem; font-weight: 700; color: var(--primary); margin-bottom: 0.2rem;">Donasi Cepat QRIS</p>
-          <p style="font-size: 0.82rem; color: var(--muted); margin-bottom: 0.65rem;">MASJID AL BAROKAH &bull; NMID: ID1025453093722</p>
-          <img src="qris-al-barokah.jpg" alt="QRIS Donasi Masjid Al Barokah" style="max-width: 220px; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border); display: block; margin: 0 auto 0.65rem;">
-          <a href="qris-al-barokah.jpg" download="qris-al-barokah.jpg" style="display: inline-block; font-size: 0.85rem; font-weight: 600; color: var(--primary); text-decoration: none; border: 1px solid var(--primary); padding: 0.45rem 0.85rem; border-radius: 8px;">
-            Unduh Gambar QRIS
-          </a>
-          <p style="font-size: 0.85rem; color: var(--text); margin-top: 0.65rem;">
-            Informasi donasi dan pembangunan; 083821110706
+        <div class="donor-footnote">
+          Nama barang yang sama otomatis digabung nominal dan jumlahnya. Untuk rincian per transaksi, buka tab
+          <button type="button" onclick="switchAppView('keuangan')">Keuangan</button>.
+        </div>
+      </div>
+
+      <!-- Kartu Saldo Utama -->
+      <div class="hero-wallet">
+        <div class="wallet-label">
+          <span>Sisa Saldo Kas Pembangunan</span>
+          <span>IDR</span>
+        </div>
+        <div class="wallet-saldo" id="heroSaldo">Rp 0</div>
+        <div class="wallet-stats">
+          <div class="w-stat-item">
+            <div class="w-stat-lbl">Donasi Uang</div>
+            <div class="w-stat-val" id="heroUang">Rp 0</div>
+          </div>
+          <div class="w-stat-item">
+            <div class="w-stat-lbl">Donasi Matrial</div>
+            <div class="w-stat-val" id="heroMatrial">Rp 0</div>
+          </div>
+          <div class="w-stat-item">
+            <div class="w-stat-lbl">Pengeluaran</div>
+            <div class="w-stat-val" id="heroKeluar">Rp 0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kartu Capaian Donasi Ramping -->
+      <div class="app-card compact-target-card" id="targetDonasiCard">
+        <div class="compact-target-header">
+          <span class="compact-target-title">Capaian Donasi</span>
+          <span class="compact-target-pct" id="targetDonasiPct">0%</span>
+        </div>
+        <div class="target-progress-track">
+          <div class="target-progress-fill" id="targetDonasiBar"></div>
+        </div>
+        <div class="compact-target-meta">
+          <span id="targetDonasiTerkumpul">Masuk: Rp 0</span>
+          <span>Target: <strong>Rp 665.684.000</strong></span>
+        </div>
+      </div>
+
+      <!-- Kartu Kebutuhan Terkini -->
+      <div class="app-card" id="kebutuhan">
+        <div class="card-header">
+          <h2 class="card-title">Kebutuhan Material Terkini</h2>
+        </div>
+        <div class="kebutuhan-subtitle" id="kebutuhanSubtitle">
+          Daftar material yang dibutuhkan untuk tahap pengerjaan saat ini:
+        </div>
+
+        <div class="transparansi-summary">
+          <div class="summary-card">
+            <div class="summary-label">Total Kebutuhan</div>
+            <div class="summary-value" id="totalKebutuhanRp">Rp 0</div>
+          </div>
+          <div class="summary-card saldo-card">
+            <div class="summary-label">Donasi Terkumpul</div>
+            <div class="summary-value" id="totalKebutuhanMasuk">0%</div>
+          </div>
+        </div>
+
+        <button type="button" class="toggle-kebutuhan-btn" id="toggleKebutuhanBtn" onclick="toggleKebutuhanPanel()">
+          Lihat Rincian Material
+        </button>
+
+        <div class="kebutuhan-panel hidden" id="kebutuhanPanel">
+          <div class="transparansi-status" id="kebutuhanStatus">Memuat data kebutuhan terkini...</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama Barang</th>
+                  <th>Jumlah</th>
+                  <th class="num">Nilai (Rp)</th>
+                  <th>Donasi Masuk</th>
+                </tr>
+              </thead>
+              <tbody id="kebutuhanBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profil Pembangunan -->
+      <div class="app-card compact-action-card" id="profilPembangunanCard">
+        <div class="compact-action-header">
+          <h2 class="card-title">Profil Pembangunan</h2>
+          <button type="button" class="trigger-pembangunan-btn" id="btnPembangunan" onclick="toggleProfilPembangunan()">
+            Profil Pembangunan
+          </button>
+        </div>
+
+        <div class="profil-detail-wrap hidden" id="profilPembangunanDetail">
+          <p class="arab-bismillah" dir="rtl" lang="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+
+          <div class="profil-section-title">1. Latar Belakang &amp; Tujuan</div>
+          <p class="profil-paragraf">
+            Masjid Al-Barokah di Blok Kedungkacip, RT 13 RW 04, Desa Tanjungkerta, Kec. Kroya, Kab. Indramayu, berdiri sejak <strong>tahun 1990</strong> sebagai pusat ibadah, pendidikan Al-Qur&rsquo;an, dan kegiatan sosial warga[span_0](start_span)[span_0](end_span).
+          </p>
+          <p class="profil-paragraf">
+            Faktor usia bangunan serta bertambahnya jamaah membuat kondisi fisik mengalami kerusakan (atap bocor, kusen lapuk, lantai keramik pecah, serta kamar mandi/tempat wudu kurang layak) dan kapasitas belum mencukupi saat Sholat Jumat maupun Hari Raya[span_1](start_span)[span_1](end_span). Melalui musyawarah warga tanggal <strong>25 Oktober 2025</strong>, disepakati <strong>Pembangunan Ulang (Renovasi Total)</strong> menjadi masjid 1 lantai yang kokoh, representatif, dan terintegrasi dengan fasilitas ibadah serta ruang penunjang[span_2](start_span)[span_2](end_span)[span_3](start_span)[span_3](end_span).
+          </p>
+
+          <div class="profil-section-title">2. Lokasi, Tanah Wakaf &amp; Strategi Pelaksanaan</div>
+          <div class="profil-info-grid">
+            <div class="profil-info-box">
+              <div class="profil-info-lbl">Alamat Lokasi</div>
+              <div class="profil-info-val">Jl. Babakan Dampyang Gantar, Blok Kedungkacip RT 13/04, Tanjungkerta, Kroya, Indramayu 45265[span_4](start_span)[span_4](end_span)[span_5](start_span)[span_5](end_span)</div>
+            </div>
+            <div class="profil-info-box">
+              <div class="profil-info-lbl">Luas Lahan &amp; Bangunan</div>
+              <div class="profil-info-val">Lahan 490 m&sup2; &bull; Bangunan Baru 180 m&sup2; (1 Lantai)[span_6](start_span)[span_6](end_span)</div>
+            </div>
+            <div class="profil-info-box">
+              <div class="profil-info-lbl">Status &amp; Sertifikat Wakaf</div>
+              <div class="profil-info-val">Tanah Wakaf &bull; NIB 10.24.000019337.0 (SK BPN 29 Juli 2025)[span_7](start_span)[span_7](end_span)[span_8](start_span)[span_8](end_span)</div>
+            </div>
+            <div class="profil-info-box">
+              <div class="profil-info-lbl">Target Waktu</div>
+              <div class="profil-info-val">24 Bulan (3 Tahap Utama)[span_9](start_span)[span_9](end_span)</div>
+            </div>
+          </div>
+          <ul class="profil-list">
+            <li><strong>Strategi Prioritas:</strong> Bangunan baru dibangun bergeser ke arah <strong>timur</strong> di area tanah wakaf, sementara masjid lama tetap dipakai ibadah hingga bangunan baru kokoh dan layak sholat[span_10](start_span)[span_10](end_span).</li>
+            <li><strong>Tahap I (Struktur Bangunan Baru):</strong> Persiapan lahan, pemasangan fondasi, dan pembangunan struktur utama (kolom, balok) hingga atap di lokasi timur[span_11](start_span)[span_11](end_span).</li>
+            <li><strong>Tahap II (Finishing Fungsional):</strong> Pemasangan dinding, lantai, instalasi listrik, dan air hingga masjid baru layak fungsi[span_12](start_span)[span_12](end_span).</li>
+            <li><strong>Tahap III (Pembongkaran &amp; Penyempurnaan):</strong> Pembongkaran masjid lama, penataan halaman, dan finishing total (cat, interior, taman)[span_13](start_span)[span_13](end_span).</li>
+          </ul>
+
+          <div class="profil-section-title">3. Legalitas &amp; Susunan Panitia</div>
+          <p class="profil-paragraf">
+            Dibentuk lewat Musyawarah Warga (25 Oktober 2025), disahkan melalui <strong>SK Kepala Desa Tanjungkerta No. 188/1.048/Pem</strong>, serta didukung <strong>Surat Keterangan Domisili No. 140/1.047/Pem</strong> (diketahui Kuwu Tanjungkerta, Rasmita)[span_14](start_span)[span_14](end_span)[span_15](start_span)[span_15](end_span)[span_16](start_span)[span_16](end_span).
+          </p>
+          <ul class="profil-list">
+            <li><strong>Penasehat:</strong> Ust. Tarman &bull; <strong>Pelindung:</strong> Bpk. Udin, Bpk. Sumarsono[span_17](start_span)[span_17](end_span)</li>
+            <li><strong>Ketua:</strong> Masruchan &bull; <strong>Sekretaris:</strong> Ismail &bull; <strong>Bendahara:</strong> Dul Karim[span_18](start_span)[span_18](end_span)</li>
+            <li><strong>Seksi Konstruksi:</strong> Kusnadi, Syahrul Sidik, Rifa&rsquo;i, Slamet[span_19](start_span)[span_19](end_span)</li>
+            <li><strong>Seksi Penggalangan Dana:</strong> Nasirin, Sairin, Yanto, Muhtar, Endi, Udi, Sukar, Hariri[span_20](start_span)[span_20](end_span)</li>
+          </ul>
+
+          <p class="profil-paragraf" style="margin-bottom: 0;">
+            Rekening resmi: <strong>Bank Mandiri 1340031912743 a.n. DULKARIM</strong> &bull; Kontak &amp; Sekretariat: <strong>083821110706</strong> (Blok Kedungkacip RT 13/04, Tanjungkerta)[span_21](start_span)[span_21](end_span)[span_22](start_span)[span_22](end_span). Laporan penerimaan dan penggunaan dana dipublikasikan rutin bulanan[span_23](start_span)[span_23](end_span).
           </p>
         </div>
       </div>
-    </section>
 
-    <section id="transparansi">
-      <h2>Transparansi Dana</h2>
-      <p>Rekap pemasukan dan pengeluaran dana pembangunan yang terhubung langsung ke Google Sheets:</p>
+      <!-- Kartu RAB -->
+      <div class="app-card compact-action-card" id="rincianRabCard">
+        <div class="compact-action-header">
+          <h2 class="card-title">RAB</h2>
+          <button type="button" class="trigger-pembangunan-btn" id="btnLihatRab" onclick="toggleRincianRab()">
+            RAB
+          </button>
+        </div>
 
-      <!-- Baris 1: Donasi Uang & Donasi Matrial | Baris 2: Total Pengeluaran & Sisa Saldo Kas -->
-      <div class="transparansi-summary">
-        <div class="summary-card">
-          <div class="summary-label">Donasi Uang</div>
-          <div class="summary-value" id="totalDonasiUang">Rp 0</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-label">Donasi Matrial</div>
-          <div class="summary-value" id="totalDonasiMatrial">Rp 0</div>
-        </div>
-        <div class="summary-card pengeluaran-card">
-          <div class="summary-label">Total Pengeluaran</div>
-          <div class="summary-value" id="totalPengeluaran">Rp 0</div>
-        </div>
-        <div class="summary-card saldo-card">
-          <div class="summary-label">Sisa Saldo Kas</div>
-          <div class="summary-value" id="sisaSaldo">Rp 0</div>
+        <div class="profil-detail-wrap hidden" id="rincianRabDetail">
+          <!-- I. Material & Alat -->
+          <div class="rab-group-title">I. Material &amp; Alat[span_24](start_span)[span_24](end_span)</div>
+          <div class="table-wrap">
+            <table class="rab-full-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Barang</th>
+                  <th>Satuan</th>
+                  <th class="num">Vol</th>
+                  <th class="num">Harga Sat.</th>
+                  <th class="num">Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1.1</td><td>Gerobak Sorong (Angkong)</td><td>Unit</td><td class="num">3</td><td class="num">550.000</td><td class="num">1.650.000</td></tr>
+                <tr><td>1.2</td><td>Sendok Semen, Kape, Skrap, Dll</td><td>Set</td><td class="num">7</td><td class="num">70.000</td><td class="num">490.000</td></tr>
+                <tr><td>1.3</td><td>Kuas, Roll Cat, Amplas, Dll</td><td>Set</td><td class="num">5</td><td class="num">65.000</td><td class="num">325.000</td></tr>
+                <tr><td>1.4</td><td>Bak &amp; Pengki</td><td>Set</td><td class="num">5</td><td class="num">50.000</td><td class="num">250.000</td></tr>
+                <tr><td>1.5</td><td>Ember Cor (Anti Pecah)</td><td>Pcs</td><td class="num">50</td><td class="num">15.000</td><td class="num">750.000</td></tr>
+                <tr><td>1.6</td><td>Sekop &amp; Cangkul</td><td>Set</td><td class="num">5</td><td class="num">150.000</td><td class="num">750.000</td></tr>
+                <tr><td>1.7</td><td>Mesin Gerinda Tangan</td><td>Unit</td><td class="num">2</td><td class="num">450.000</td><td class="num">900.000</td></tr>
+                <tr><td>1.8</td><td>Mata Gerinda (Potong Besi/Keramik)</td><td>Pcs</td><td class="num">20</td><td class="num">15.000</td><td class="num">300.000</td></tr>
+                <tr><td>1.9</td><td>Benang Tukang &amp; Selang Timbang</td><td>Ls</td><td class="num">1</td><td class="num">250.000</td><td class="num">250.000</td></tr>
+                <tr class="rab-subtotal-row"><td colspan="5">SUB TOTAL I</td><td class="num">5.665.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- II. Fondasi, Dinding & Struktur -->
+          <div class="rab-group-title">II. Fondasi, Dinding &amp; Struktur (Satuan Truk/Sak)[span_25](start_span)[span_25](end_span)</div>
+          <div class="table-wrap">
+            <table class="rab-full-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Barang</th>
+                  <th>Satuan</th>
+                  <th class="num">Vol</th>
+                  <th class="num">Harga Sat.</th>
+                  <th class="num">Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>2.1</td><td>Batu Belah/Kali</td><td>Dump Truck</td><td class="num">7</td><td class="num">1.600.000</td><td class="num">11.200.000</td></tr>
+                <tr><td>2.2</td><td>Pasir Urug</td><td>Dump Truck</td><td class="num">10</td><td class="num">1.300.000</td><td class="num">13.000.000</td></tr>
+                <tr><td>2.3</td><td>Pasir Pasang &amp; Cor</td><td>Dump Truck</td><td class="num">12</td><td class="num">2.800.000</td><td class="num">33.600.000</td></tr>
+                <tr><td>2.4</td><td>Batu Split</td><td>Dump Truck</td><td class="num">5</td><td class="num">1.800.000</td><td class="num">9.000.000</td></tr>
+                <tr><td>2.5</td><td>Bata Merah</td><td>Pcs</td><td class="num">22.000</td><td class="num">800</td><td class="num">17.600.000</td></tr>
+                <tr><td>2.6</td><td>Semen Portland (50kg)</td><td>Sak</td><td class="num">600</td><td class="num">72.000</td><td class="num">43.200.000</td></tr>
+                <tr><td>2.7</td><td>Besi Beton 8mm</td><td>Batang</td><td class="num">380</td><td class="num">45.000</td><td class="num">17.100.000</td></tr>
+                <tr><td>2.8</td><td>Besi Beton 10mm</td><td>Batang</td><td class="num">180</td><td class="num">80.000</td><td class="num">14.400.000</td></tr>
+                <tr><td>2.9</td><td>Besi Beton 12mm</td><td>Batang</td><td class="num">380</td><td class="num">115.000</td><td class="num">43.700.000</td></tr>
+                <tr><td>2.10</td><td>Besi Beton 14mm</td><td>Batang</td><td class="num">60</td><td class="num">190.000</td><td class="num">11.400.000</td></tr>
+                <tr><td>2.11</td><td>Kawat Bendrat (Tali Besi)</td><td>Kg</td><td class="num">50</td><td class="num">25.000</td><td class="num">1.250.000</td></tr>
+                <tr><td>2.12</td><td>Paku Beton 5&quot;-7&quot;</td><td>Dus</td><td class="num">10</td><td class="num">50.000</td><td class="num">500.000</td></tr>
+                <tr><td>2.13</td><td>Multiplex 1,8 mm</td><td>Lembar</td><td class="num">60</td><td class="num">250.000</td><td class="num">15.000.000</td></tr>
+                <tr><td>2.14</td><td>Sewa Mesin Molen</td><td>Hari</td><td class="num">20</td><td class="num">75.000</td><td class="num">1.500.000</td></tr>
+                <tr><td>2.15</td><td>Paku Campuran 3&quot;-7&quot;</td><td>Kg</td><td class="num">50</td><td class="num">25.000</td><td class="num">1.250.000</td></tr>
+                <tr class="rab-subtotal-row"><td colspan="5">SUB TOTAL II</td><td class="num">233.700.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- III. Pekerjaan Dak Atap -->
+          <div class="rab-group-title">III. Pekerjaan Dak Atap (Sistem Bondek)[span_26](start_span)[span_26](end_span)</div>
+          <div class="table-wrap">
+            <table class="rab-full-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Barang</th>
+                  <th>Satuan</th>
+                  <th class="num">Vol</th>
+                  <th class="num">Harga Sat.</th>
+                  <th class="num">Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>3.1</td><td>Bondek</td><td>Lembar</td><td class="num">30</td><td class="num">650.000</td><td class="num">19.500.000</td></tr>
+                <tr><td>3.2</td><td>Bamboo</td><td>Batang</td><td class="num">50</td><td class="num">13.000</td><td class="num">650.000</td></tr>
+                <tr><td>3.3</td><td>Kayu Usuk &quot;4x4&quot;</td><td>m3</td><td class="num">1</td><td class="num">4.500.000</td><td class="num">4.500.000</td></tr>
+                <tr><td>3.4</td><td>Plafon PVC &quot;20cm x 6m&quot;</td><td>Lembar</td><td class="num">150</td><td class="num">72.000</td><td class="num">10.800.000</td></tr>
+                <tr><td>3.5</td><td>Hollow 4 x 4</td><td>Batang</td><td class="num">180</td><td class="num">25.000</td><td class="num">4.500.000</td></tr>
+                <tr><td>3.6</td><td>Skrup</td><td>Dus</td><td class="num">10</td><td class="num">165.000</td><td class="num">1.650.000</td></tr>
+                <tr><td>3.7</td><td>Lis PVC &quot;6cm x 4m&quot;</td><td>Batang</td><td class="num">60</td><td class="num">45.000</td><td class="num">2.700.000</td></tr>
+                <tr class="rab-subtotal-row"><td colspan="5">SUB TOTAL III</td><td class="num">44.300.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- IV. Instalasi Air & Listrik -->
+          <div class="rab-group-title">IV. Instalasi Air &amp; Listrik[span_27](start_span)[span_27](end_span)</div>
+          <div class="table-wrap">
+            <table class="rab-full-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Barang</th>
+                  <th>Satuan</th>
+                  <th class="num">Vol</th>
+                  <th class="num">Harga Sat.</th>
+                  <th class="num">Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>4.1</td><td>Kabel NYM 3x2,5mm (Induk)</td><td>Roll</td><td class="num">2</td><td class="num">950.000</td><td class="num">1.900.000</td></tr>
+                <tr><td>4.2</td><td>Kabel NYM 2x1,5mm (Lampu)</td><td>Roll</td><td class="num">4</td><td class="num">650.000</td><td class="num">2.600.000</td></tr>
+                <tr><td>4.3</td><td>Lampu LED Panel 12 Watt</td><td>Pcs</td><td class="num">24</td><td class="num">85.000</td><td class="num">2.040.000</td></tr>
+                <tr><td>4.4</td><td>Saklar &amp; Stop Kontak (Broco)</td><td>Pcs</td><td class="num">16</td><td class="num">35.000</td><td class="num">560.000</td></tr>
+                <tr><td>4.5</td><td>T-Dus &amp; Mangkokan</td><td>Set</td><td class="num">20</td><td class="num">10.000</td><td class="num">200.000</td></tr>
+                <tr><td>4.6</td><td>Pipa Conduit (Lonceng Kabel)</td><td>Batang</td><td class="num">50</td><td class="num">15.000</td><td class="num">750.000</td></tr>
+                <tr><td>4.7</td><td>Pompa Air Jet Pump</td><td>Unit</td><td class="num">1</td><td class="num">2.500.000</td><td class="num">2.500.000</td></tr>
+                <tr><td>4.8</td><td>Toren Air (1000 Liter)</td><td>Unit</td><td class="num">1</td><td class="num">1.800.000</td><td class="num">1.800.000</td></tr>
+                <tr><td>4.9</td><td>Pipa PVC AW 3/4 (Air Bersih)</td><td>Batang</td><td class="num">15</td><td class="num">65.000</td><td class="num">975.000</td></tr>
+                <tr><td>4.10</td><td>Pipa PVC D 4&quot; (Air Kotor)</td><td>Batang</td><td class="num">18</td><td class="num">160.000</td><td class="num">2.880.000</td></tr>
+                <tr><td>4.11</td><td>Knee, T, Sok, V Sok, Dll</td><td>Set</td><td class="num">15</td><td class="num">150.000</td><td class="num">2.250.000</td></tr>
+                <tr><td>4.12</td><td>Kran Air Wudu</td><td>Pcs</td><td class="num">12</td><td class="num">35.000</td><td class="num">420.000</td></tr>
+                <tr class="rab-subtotal-row"><td colspan="5">SUB TOTAL IV</td><td class="num">18.875.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- V. Kubah, Kusen & Finishing -->
+          <div class="rab-group-title">V. Kubah, Kusen &amp; Finishing[span_28](start_span)[span_28](end_span)</div>
+          <div class="table-wrap">
+            <table class="rab-full-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Barang</th>
+                  <th>Satuan</th>
+                  <th class="num">Vol</th>
+                  <th class="num">Harga Sat.</th>
+                  <th class="num">Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>5.1</td><td>Kubah Utama 4,5m x 4m (Stainless Steel)</td><td>Unit</td><td class="num">1</td><td class="num">120.000.000</td><td class="num">120.000.000</td></tr>
+                <tr><td>5.3</td><td>Granit</td><td>Dus</td><td class="num">160</td><td class="num">200.000</td><td class="num">32.000.000</td></tr>
+                <tr><td>5.4</td><td>Cat Tembok</td><td>Pail</td><td class="num">5</td><td class="num">850.000</td><td class="num">4.250.000</td></tr>
+                <tr><td>5.5</td><td>Plamir</td><td>Pail</td><td class="num">2</td><td class="num">750.000</td><td class="num">1.500.000</td></tr>
+                <tr><td>5.6</td><td>Kusen Pintu &quot;120x200&quot;</td><td>Lobang</td><td class="num">3</td><td class="num">750.000</td><td class="num">2.250.000</td></tr>
+                <tr><td>5.7</td><td>Kusen Pintu &quot;80x200&quot;</td><td>Lobang</td><td class="num">2</td><td class="num">650.000</td><td class="num">1.300.000</td></tr>
+                <tr><td>5.8</td><td>Daun Pintu &quot;65x200&quot;</td><td>Lembar</td><td class="num">6</td><td class="num">750.000</td><td class="num">4.500.000</td></tr>
+                <tr><td>5.9</td><td>Daun Pintu &quot;80x200&quot;</td><td>Lembar</td><td class="num">2</td><td class="num">750.000</td><td class="num">1.500.000</td></tr>
+                <tr><td>5.10</td><td>Jendela &quot;250x150&quot;</td><td>Lobang</td><td class="num">5</td><td class="num">550.000</td><td class="num">2.750.000</td></tr>
+                <tr><td>5.11</td><td>Bingkai Jendela + Kaca</td><td>Lembar</td><td class="num">25</td><td class="num">350.000</td><td class="num">8.750.000</td></tr>
+                <tr><td>5.12</td><td>Engsel Pintu</td><td>Set</td><td class="num">12</td><td class="num">30.000</td><td class="num">360.000</td></tr>
+                <tr><td>5.13</td><td>Engsel Jendela</td><td>Set</td><td class="num">25</td><td class="num">20.000</td><td class="num">500.000</td></tr>
+                <tr><td>5.14</td><td>Kunci Pintu</td><td>Pcs</td><td class="num">5</td><td class="num">15.000</td><td class="num">75.000</td></tr>
+                <tr><td>5.15</td><td>Slot Pintu</td><td>Pcs</td><td class="num">8</td><td class="num">25.000</td><td class="num">200.000</td></tr>
+                <tr><td>5.16</td><td>Slot Jendela</td><td>Pcs</td><td class="num">25</td><td class="num">10.000</td><td class="num">250.000</td></tr>
+                <tr><td>5.17</td><td>Hak Angin</td><td>Pcs</td><td class="num">25</td><td class="num">10.000</td><td class="num">250.000</td></tr>
+                <tr><td>5.18</td><td>Plistur Kayu</td><td>Kaleng</td><td class="num">19</td><td class="num">120.000</td><td class="num">2.280.000</td></tr>
+                <tr><td>5.19</td><td>Handle Pintu</td><td>Set</td><td class="num">6</td><td class="num">150.000</td><td class="num">900.000</td></tr>
+                <tr class="rab-subtotal-row"><td colspan="5">SUB TOTAL V</td><td class="num">183.615.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- VI. Toilet & Tempat Wudu (Terpisah) -->
+          <div class="rab-group-title">VI. Toilet &amp; Tempat Wudu (Terpisah)[span_29](start_span)[span_29](end_span)</div>
+          <div class="table-wrap">
+            <table class="rab-full-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Barang</th>
+                  <th>Satuan</th>
+                  <th class="num">Vol</th>
+                  <th class="num">Harga Sat.</th>
+                  <th class="num">Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>6.1</td><td>Baja Ringan</td><td>Batang</td><td class="num">35</td><td class="num">95.000</td><td class="num">3.325.000</td></tr>
+                <tr><td>6.2</td><td>Atap Spandek</td><td>m2</td><td class="num">25</td><td class="num">85.000</td><td class="num">2.125.000</td></tr>
+                <tr><td>6.3</td><td>Kloset Jongkok</td><td>Unit</td><td class="num">2</td><td class="num">250.000</td><td class="num">500.000</td></tr>
+                <tr><td>6.4</td><td>Pintu Toilet</td><td>Set</td><td class="num">2</td><td class="num">800.000</td><td class="num">1.600.000</td></tr>
+                <tr><td>6.5</td><td>Keramik Lantai &amp; Dinding</td><td>Dus</td><td class="num">66</td><td class="num">80.000</td><td class="num">5.280.000</td></tr>
+                <tr class="rab-subtotal-row"><td colspan="5">SUB TOTAL VI</td><td class="num">12.830.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Rekapitulasi Grand Total -->
+          <div class="rab-group-title">Rekapitulasi Total Anggaran[span_30](start_span)[span_30](end_span)</div>
+          <div class="table-wrap">
+            <table class="rab-rekap-table">
+              <thead>
+                <tr>
+                  <th>Deskripsi Pekerjaan</th>
+                  <th class="num">Total Biaya (Rp)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Total Kebutuhan Material &amp; Alat (I - VI)</td>
+                  <td class="num">Rp 498.985.000</td>
+                </tr>
+                <tr>
+                  <td>Estimasi Upah Tenaga Kerja (Borongan)</td>
+                  <td class="num">Rp 135.000.000</td>
+                </tr>
+                <tr>
+                  <td>Biaya Tak Terduga / Operasional (5%)</td>
+                  <td class="num">Rp 31.699.000</td>
+                </tr>
+                <tr class="rab-grand-row">
+                  <td>GRAND TOTAL</td>
+                  <td class="num">Rp 665.684.000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="tab-buttons">
-        <button type="button" class="tab-btn active" id="btnTabPemasukan" onclick="switchTab('pemasukan')">
-          Pemasukan (<span id="countPemasukan">0</span>)
+    <!-- TAB 2: PROGRES PEMBANGUNAN -->
+    <div id="view-progres" class="app-view">
+      <div class="app-card">
+        <div class="card-header">
+          <h2 class="card-title">Progres 9 Tahapan</h2>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--muted); margin-bottom: 0.75rem;">
+          Ketuk foto untuk memperbesar atau ketuk tahapan yang sedang berjalan untuk melihat kebutuhan materialnya.
+        </p>
+        <div class="progres-grid" id="progresList">Memuat data progres...</div>
+      </div>
+    </div>
+
+    <!-- TAB 3: DONASI & QRIS -->
+    <div id="view-donasi" class="app-view">
+      <div class="bank-card">
+        <div style="font-size: 0.78rem; opacity: 0.85;">Transfer Bank Resmi</div>
+        <div style="font-size: 1.05rem; font-weight: 700; margin-top: 0.15rem;">BANK MANDIRI</div>
+        <div class="rek-number" id="no-rek">1340031912743</div>
+        <div style="font-size: 0.85rem; opacity: 0.95;">a.n. <strong>DULKARIM (Bendahara)</strong></div>
+        <button type="button" class="copy-btn" onclick="salinRekening(this)">
+          Salin Nomor Rekening
         </button>
-        <button type="button" class="tab-btn" id="btnTabPengeluaran" onclick="switchTab('pengeluaran')">
-          Pengeluaran (<span id="countPengeluaran">0</span>)
-        </button>
       </div>
 
-      <div class="transparansi-toolbar">
-        <input type="search" id="searchInput" placeholder="Cari nama, alamat, atau barang...">
-        <select id="jenisFilter">
-          <option value="">Semua Jenis</option>
-        </select>
-        <select id="bulanFilter">
-          <option value="">Semua Bulan</option>
-        </select>
+      <div class="qris-box">
+        <div style="font-size: 0.95rem; font-weight: 700; color: var(--primary);">Scan QRIS Instan</div>
+        <div style="font-size: 0.78rem; color: var(--muted); margin-bottom: 0.75rem;">MASJID AL BAROKAH &bull; NMID: ID1025453093722</div>
+        <img src="qris-al-barokah.jpg" alt="QRIS Donasi Masjid Al Barokah" style="max-width: 230px; width: 100%; border-radius: 12px; border: 1px solid var(--border); display: block; margin: 0 auto 0.85rem;">
+        <a href="qris-al-barokah.jpg" download="qris-al-barokah.jpg" style="display: block; width: 100%; font-size: 0.86rem; font-weight: 700; color: var(--primary); text-decoration: none; border: 1.5px solid var(--primary); padding: 0.6rem; border-radius: 10px;">
+          Simpan Gambar QRIS ke Galeri
+        </a>
+        <p style="font-size: 0.8rem; color: var(--muted); margin-top: 0.75rem;">
+          Konfirmasi / Info Pembangunan: <strong>083821110706</strong>
+        </p>
       </div>
+    </div>
 
-      <div class="result-banner hidden" id="resultBanner">
-        <div class="result-banner-main" id="resultBannerMain"></div>
-        <div class="result-banner-sub" id="resultBannerSub"></div>
-      </div>
-
-      <div class="transparansi-status" id="statusText">Memuat data keuangan...</div>
-
-      <!-- Tabel Pemasukan -->
-      <div class="table-wrap" id="wrapPemasukan">
-        <table>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Nama</th>
-              <th class="num">Nominal</th>
-              <th>Jenis</th>
-              <th>Alamat</th>
-              <th>Nama Barang</th>
-              <th>Satuan</th>
-              <th class="num">Volume</th>
-              <th class="num">Harga Satuan</th>
-              <th>Tanggal</th>
-            </tr>
-          </thead>
-          <tbody id="donasiBody"></tbody>
-        </table>
-      </div>
-
-      <!-- Tabel Pengeluaran -->
-      <div class="table-wrap hidden" id="wrapPengeluaran">
-        <table>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Nama Barang</th>
-              <th>Satuan</th>
-              <th class="num">Volume</th>
-              <th class="num">Harga Satuan</th>
-              <th class="num">Jumlah Harga</th>
-              <th>Tanggal</th>
-            </tr>
-          </thead>
-          <tbody id="pengeluaranBody"></tbody>
-        </table>
-      </div>
-
-      <!-- Navigasi Halaman (15 Baris per Halaman) -->
-      <div class="pagination-bar" id="paginationBar">
-        <button type="button" class="page-btn" id="prevPageBtn" onclick="changePage(-1)" disabled>
-          &larr; Sebelumnya
-        </button>
-        <span class="page-info" id="pageInfo">Halaman 1 dari 1</span>
-        <button type="button" class="page-btn" id="nextPageBtn" onclick="changePage(1)" disabled>
-          Berikutnya &rarr;
-        </button>
-      </div>
-    </section>
-
-    <!-- Bagian Kebutuhan Terkini -->
-    <section id="kebutuhan">
-      <h2>Kebutuhan Terkini</h2>
-      <div class="kebutuhan-subtitle" id="kebutuhanSubtitle">
-        Daftar material yang dibutuhkan untuk tahap pengerjaan saat ini:
-      </div>
-
-      <div class="kebutuhan-summary-row">
-        <div class="summary-card">
-          <div class="summary-label">Total Kebutuhan</div>
-          <div class="summary-value" id="totalKebutuhanRp">Rp 0</div>
+    <!-- TAB 4: TRANSPARANSI KEUANGAN -->
+    <div id="view-keuangan" class="app-view">
+      <div class="app-card">
+        <div class="card-header">
+          <h2 class="card-title">Transparansi Keuangan</h2>
         </div>
-        <div class="summary-card saldo-card">
-          <div class="summary-label">Donasi Terkumpul</div>
-          <div class="summary-value" id="totalKebutuhanMasuk">0%</div>
+
+        <div class="transparansi-summary">
+          <div class="summary-card">
+            <div class="summary-label">Donasi Uang</div>
+            <div class="summary-value" id="totalDonasiUang">Rp 0</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Donasi Matrial</div>
+            <div class="summary-value" id="totalDonasiMatrial">Rp 0</div>
+          </div>
+          <div class="summary-card pengeluaran-card">
+            <div class="summary-label">Total Pengeluaran</div>
+            <div class="summary-value" id="totalPengeluaran">Rp 0</div>
+          </div>
+          <div class="summary-card saldo-card">
+            <div class="summary-label">Sisa Saldo Kas</div>
+            <div class="summary-value" id="sisaSaldo">Rp 0</div>
+          </div>
         </div>
-      </div>
 
-      <button type="button" class="toggle-kebutuhan-btn" id="toggleKebutuhanBtn" onclick="toggleKebutuhanPanel()">
-        Lihat Kebutuhan Material
-      </button>
+        <div class="segmented-control">
+          <button type="button" class="seg-btn active" id="btnTabPemasukan" onclick="switchTab('pemasukan')">
+            Pemasukan (<span id="countPemasukan">0</span>)
+          </button>
+          <button type="button" class="seg-btn" id="btnTabPengeluaran" onclick="switchTab('pengeluaran')">
+            Pengeluaran (<span id="countPengeluaran">0</span>)
+          </button>
+        </div>
 
-      <div class="kebutuhan-panel hidden" id="kebutuhanPanel">
-        <div class="transparansi-status" id="kebutuhanStatus">Memuat data kebutuhan terkini...</div>
+        <div class="transparansi-toolbar">
+          <input type="search" id="searchInput" placeholder="Cari nama donatur, alamat, atau barang...">
+          <select id="jenisFilter">
+            <option value="">Semua Jenis</option>
+          </select>
+          <select id="bulanFilter">
+            <option value="">Semua Bulan</option>
+          </select>
+        </div>
 
-        <div class="table-wrap">
+        <div class="result-banner hidden" id="resultBanner">
+          <div class="result-banner-main" id="resultBannerMain"></div>
+          <div class="result-banner-sub" id="resultBannerSub"></div>
+        </div>
+
+        <div class="transparansi-status" id="statusText">Memuat data keuangan...</div>
+
+        <!-- Tabel Pemasukan -->
+        <div class="table-wrap" id="wrapPemasukan">
           <table>
             <thead>
               <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th class="num">Nominal</th>
+                <th>Jenis</th>
+                <th>Alamat</th>
                 <th>Nama Barang</th>
-                <th>Jumlah</th>
-                <th class="num">Nilai (Rp)</th>
-                <th>Donasi Masuk</th>
+                <th>Satuan</th>
+                <th class="num">Volume</th>
+                <th class="num">Harga Satuan</th>
+                <th>Tanggal</th>
               </tr>
             </thead>
-            <tbody id="kebutuhanBody"></tbody>
+            <tbody id="donasiBody"></tbody>
           </table>
         </div>
+
+        <!-- Tabel Pengeluaran -->
+        <div class="table-wrap hidden" id="wrapPengeluaran">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Barang</th>
+                <th>Satuan</th>
+                <th class="num">Volume</th>
+                <th class="num">Harga Satuan</th>
+                <th class="num">Jumlah Harga</th>
+                <th>Tanggal</th>
+              </tr>
+            </thead>
+            <tbody id="pengeluaranBody"></tbody>
+          </table>
+        </div>
+
+        <div class="pagination-bar" id="paginationBar">
+          <button type="button" class="page-btn" id="prevPageBtn" onclick="changePage(-1)" disabled>
+            &larr; Sebelumnya
+          </button>
+          <span class="page-info" id="pageInfo">Hal 1 / 1</span>
+          <button type="button" class="page-btn" id="nextPageBtn" onclick="changePage(1)" disabled>
+            Berikutnya &rarr;
+          </button>
+        </div>
       </div>
+    </div>
 
-      <div class="cta-kebutuhan">
-        <span>Ingin membantu memenuhi kebutuhan material di atas?</span>
-        <a href="#donasi">Salurkan Donasi</a>
+    <!-- TAB 5: GALERI DOKUMENTASI -->
+    <div id="view-galeri" class="app-view">
+      <div class="app-card">
+        <div class="card-header">
+          <h2 class="card-title">Galeri Dokumentasi</h2>
+        </div>
+        <div class="gallery-grid" id="galleryList"></div>
       </div>
-    </section>
+    </div>
 
-    <!-- Progres pembangunan -->
-    <section id="progres">
-      <h2>Progres pembangunan</h2>
-      <div class="progres-grid" id="progresList">Memuat...</div>
-    </section>
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <button type="button" class="bnav-item active" data-view="beranda" onclick="switchAppView('beranda')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>Beranda</span>
+      </button>
 
-    <!-- Galeri Dokumentasi -->
-    <section id="gallery">
-      <h2>Galeri Dokumentasi</h2>
-      <div class="gallery-grid" id="galleryList"></div>
-    </section>
-  </main>
+      <button type="button" class="bnav-item" data-view="progres" onclick="switchAppView('progres')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <span>Progres</span>
+      </button>
 
-  <!-- Modal Pratinjau Gambar Progres & Galeri -->
+      <button type="button" class="bnav-item bnav-donate" data-view="donasi" onclick="switchAppView('donasi')">
+        <div class="bnav-donate-circle">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </div>
+        <span>Donasi</span>
+      </button>
+
+      <button type="button" class="bnav-item" data-view="keuangan" onclick="switchAppView('keuangan')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span>Keuangan</span>
+      </button>
+
+      <button type="button" class="bnav-item" data-view="galeri" onclick="switchAppView('galeri')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <span>Galeri</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Modal Pratinjau Gambar -->
   <div class="img-modal hidden" id="imgModal" onclick="closeImgModal(event)">
     <div class="img-modal-card">
       <img id="imgModalSrc" src="" alt="">
@@ -956,11 +1774,217 @@
     </div>
   </div>
 
-  <footer>
-    &copy; 2026 Panitia Pembangunan Masjid Al-Barokah Tanjungkerta.
-  </footer>
-
   <script>
+    // Target RAB keseluruhan sesuai proposal pembangunan (Rp 665.684.000)[span_31](start_span)[span_31](end_span)[span_32](start_span)[span_32](end_span)
+    const TARGET_RAB_PEMBANGUNAN = 665684000;
+
+    // Navigasi antar tampilan tab aplikasi
+    function switchAppView(viewName) {
+      document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.bnav-item').forEach(btn => btn.classList.remove('active'));
+
+      const targetView = document.getElementById('view-' + viewName);
+      if (targetView) targetView.classList.add('active');
+
+      const activeBtn = document.querySelector(`.bnav-item[data-view="${viewName}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Buka / sembunyikan profil pembangunan saat tombol "Profil Pembangunan" diklik
+    function toggleProfilPembangunan(forceOpen = false) {
+      const detailEl = document.getElementById("profilPembangunanDetail");
+      const btnEl = document.getElementById("btnPembangunan");
+      const isHidden = detailEl.classList.contains("hidden");
+
+      if (isHidden || forceOpen) {
+        detailEl.classList.remove("hidden");
+        btnEl.classList.add("expanded");
+        btnEl.textContent = "Tutup";
+      } else {
+        detailEl.classList.add("hidden");
+        btnEl.classList.remove("expanded");
+        btnEl.textContent = "Profil Pembangunan";
+      }
+    }
+
+    // Buka / sembunyikan rincian RAB saat tombol "RAB" diklik
+    function toggleRincianRab(forceOpen = false) {
+      const detailEl = document.getElementById("rincianRabDetail");
+      const btnEl = document.getElementById("btnLihatRab");
+      const isHidden = detailEl.classList.contains("hidden");
+
+      if (isHidden || forceOpen) {
+        detailEl.classList.remove("hidden");
+        btnEl.classList.add("expanded");
+        btnEl.textContent = "Tutup";
+      } else {
+        detailEl.classList.add("hidden");
+        btnEl.classList.remove("expanded");
+        btnEl.textContent = "RAB";
+      }
+    }
+
+    // Pencarian nama donatur mandiri di Beranda dengan penggabungan kesamaan nama barang & jumlahnya
+    const homeDonorInput = document.getElementById("homeDonorSearch");
+    const homeDonorResetBtn = document.getElementById("homeDonorResetBtn");
+    const homeDonorResultCard = document.getElementById("homeDonorResultCard");
+    const homeDonorTotalEl = document.getElementById("homeDonorTotal");
+    const homeDonorMetaEl = document.getElementById("homeDonorMeta");
+    const homeDonorStatusEl = document.getElementById("homeDonorStatus");
+    const homeDonorBody = document.getElementById("homeDonorBody");
+    const homeDonorPrevBtn = document.getElementById("homeDonorPrevBtn");
+    const homeDonorNextBtn = document.getElementById("homeDonorNextBtn");
+    const homeDonorPageInfoEl = document.getElementById("homeDonorPageInfo");
+
+    let donorSearchPage = 1;
+
+    function normalizeKey(str) {
+      return String(str || "").trim().toLowerCase().replace(/\s+/g, " ");
+    }
+
+    function buildAccumulatedDonorRows(matchedRows) {
+      const grouped = new Map();
+
+      matchedRows.forEach((item) => {
+        const namaBersih = String(item.nama || "").trim() || "-";
+        const jenisBersih = String(item.jenis || "").trim() || "-";
+        const barangBersih = String(item.namaBarang || "").trim();
+        const satuanBersih = String(item.satuan || "").trim();
+        const volNum = parseNumber(item.volume);
+
+        const groupKey = barangBersih
+          ? `${normalizeKey(namaBersih)}||barang||${normalizeKey(barangBersih)}||${normalizeKey(satuanBersih)}`
+          : `${normalizeKey(namaBersih)}||jenis||${normalizeKey(jenisBersih)}`;
+
+        if (!grouped.has(groupKey)) {
+          grouped.set(groupKey, {
+            nama: namaBersih,
+            nominalNum: 0,
+            jenisSet: new Set([jenisBersih]),
+            namaBarang: barangBersih || "-",
+            satuan: satuanBersih,
+            totalVolume: 0,
+            hasVolume: false
+          });
+        }
+
+        const g = grouped.get(groupKey);
+        g.nominalNum += item.nominalNum;
+        g.jenisSet.add(jenisBersih);
+
+        if (volNum > 0) {
+          g.totalVolume += volNum;
+          g.hasVolume = true;
+        }
+      });
+
+      return [...grouped.values()].map((g) => {
+        let jumlahText = "";
+        if (g.hasVolume) {
+          const volFormatted = Number.isInteger(g.totalVolume)
+            ? g.totalVolume.toLocaleString("id-ID")
+            : g.totalVolume.toLocaleString("id-ID", { maximumFractionDigits: 2 });
+          jumlahText = `${volFormatted} ${g.satuan}`.trim();
+        }
+
+        return {
+          nama: g.nama,
+          nominalNum: g.nominalNum,
+          jenis: [...g.jenisSet].filter((j) => j !== "-").join(", ") || "-",
+          namaBarang: g.namaBarang,
+          jumlahText
+        };
+      });
+    }
+
+    function renderHomeDonorSearch() {
+      const rawKeyword = homeDonorInput ? homeDonorInput.value.trim() : "";
+      const keyword = normalizeKey(rawKeyword);
+
+      if (rawKeyword.length > 0) {
+        homeDonorResetBtn.classList.remove("hidden");
+      } else {
+        homeDonorResetBtn.classList.add("hidden");
+        homeDonorResultCard.classList.add("hidden");
+        return;
+      }
+
+      homeDonorResultCard.classList.remove("hidden");
+
+      const matched = pemasukanRows.filter((item) =>
+        normalizeKey(item.nama).includes(keyword)
+      );
+
+      const totalDidonasikan = matched.reduce((acc, item) => acc + item.nominalNum, 0);
+      const accumulatedRows = buildAccumulatedDonorRows(matched);
+
+      const totalPages = Math.max(1, Math.ceil(accumulatedRows.length / ROWS_PER_PAGE));
+      if (donorSearchPage > totalPages) donorSearchPage = totalPages;
+      if (donorSearchPage < 1) donorSearchPage = 1;
+
+      homeDonorTotalEl.textContent = formatRupiah(totalDidonasikan);
+      homeDonorMetaEl.textContent = `Pencarian nama "${rawKeyword}" · ${matched.length} catatan → ${accumulatedRows.length} ringkasan`;
+
+      homeDonorPageInfoEl.textContent = `Hal ${donorSearchPage} / ${totalPages}`;
+      homeDonorPrevBtn.disabled = donorSearchPage <= 1 || accumulatedRows.length === 0;
+      homeDonorNextBtn.disabled = donorSearchPage >= totalPages || accumulatedRows.length === 0;
+
+      if (accumulatedRows.length === 0) {
+        homeDonorStatusEl.textContent = `Tidak ditemukan data donatur dengan nama "${rawKeyword}".`;
+        homeDonorBody.innerHTML =
+          '<tr><td colspan="5" style="text-align:center; padding:16px;">Nama donatur tidak ditemukan.</td></tr>';
+        return;
+      }
+
+      const startIdx = (donorSearchPage - 1) * ROWS_PER_PAGE;
+      const pageItems = accumulatedRows.slice(startIdx, startIdx + ROWS_PER_PAGE);
+      const endIdx = startIdx + pageItems.length;
+
+      homeDonorStatusEl.textContent = `Menampilkan ringkasan ${startIdx + 1}–${endIdx} dari ${accumulatedRows.length} item.`;
+
+      homeDonorBody.innerHTML = pageItems
+        .map((item, i) => {
+          const jumlahHtml = item.jumlahText
+            ? `<span class="item-qty-sub">${escapeHTML(item.jumlahText)}</span>`
+            : "";
+
+          return `
+            <tr>
+              <td>${startIdx + i + 1}</td>
+              <td><strong>${escapeHTML(item.nama)}</strong></td>
+              <td class="num">${formatRupiah(item.nominalNum)}</td>
+              <td>${escapeHTML(item.jenis)}</td>
+              <td>${escapeHTML(item.namaBarang)}${jumlahHtml}</td>
+            </tr>
+          `;
+        })
+        .join("");
+    }
+
+    function cariDonaturDariBeranda(event) {
+      if (event) event.preventDefault();
+      donorSearchPage = 1;
+      renderHomeDonorSearch();
+    }
+
+    function handleHomeDonorInput() {
+      donorSearchPage = 1;
+      renderHomeDonorSearch();
+    }
+
+    function resetHomeDonorSearch() {
+      homeDonorInput.value = "";
+      donorSearchPage = 1;
+      renderHomeDonorSearch();
+    }
+
+    function changeDonorPage(delta) {
+      donorSearchPage += delta;
+      renderHomeDonorSearch();
+    }
+
     function salinRekening(btn) {
       const norek = document.getElementById('no-rek').innerText;
       navigator.clipboard.writeText(norek).then(() => {
@@ -980,26 +2004,27 @@
       if (isHidden || forceOpen) {
         panel.classList.remove("hidden");
         btn.classList.add("expanded");
-        btn.textContent = "Sembunyikan Kebutuhan Material";
+        btn.textContent = "Sembunyikan Rincian Material";
       } else {
         panel.classList.add("hidden");
         btn.classList.remove("expanded");
-        btn.textContent = "Lihat Kebutuhan Material";
+        btn.textContent = "Lihat Rincian Material";
       }
     }
 
     function goToKebutuhanTerkini() {
+      switchAppView('beranda');
       toggleKebutuhanPanel(true);
-      const target = document.getElementById("kebutuhan");
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+      setTimeout(() => {
+        const target = document.getElementById("kebutuhan");
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
     }
 
     function openImgModal(event, src, title) {
-      if (event) {
-        event.stopPropagation();
-      }
+      if (event) event.stopPropagation();
       if (!src) return;
       const modal = document.getElementById("imgModal");
       const modalImg = document.getElementById("imgModalSrc");
@@ -1018,7 +2043,6 @@
       }
     }
 
-    // Daftar gambar untuk seluruh tahapan progres (huruf kecil)
     const PROGRES_IMAGES = {
       "pondasi": "pondasi.jpg",
       "tempat wudlu": "tempat-wudlu.jpg",
@@ -1041,14 +2065,13 @@
       return "";
     }
 
-    // Daftar foto untuk Galeri Dokumentasi
     const GALLERY_ITEMS = [
       { judul: "Peletakan Batu Pertama", src: "peletakan-batu-pertama.jpg" },
-      { judul: "Kerja Bakti", src: "kerja-bakti.jpg" },      { judul: "Kolom cor gantung", src: "kolom-cor-gantung.jpg" },
-      { judul: "Lembur", src: "lembur.jpg" },      { judul: "pasang-batu-pondasi", src: "pasang-batu-pondasi.jpg" },
-
+      { judul: "Kerja Bakti", src: "kerja-bakti.jpg" },
+      { judul: "Kolom cor gantung", src: "kolom-cor-gantung.jpg" },
+      { judul: "Lembur", src: "lembur.jpg" },
+      { judul: "Pasang Batu Pondasi", src: "pasang-batu-pondasi.jpg" },
       { judul: "Pengiriman Material", src: "pengiriman-material.jpg" },
-    
       { judul: "Kiriman Bata Merah", src: "kiriman-bata-merah.jpg" }
     ];
 
@@ -1265,7 +2288,7 @@
         wrapPemasukan.classList.remove("hidden");
         wrapPengeluaran.classList.add("hidden");
         jenisFilter.classList.remove("hidden");
-        searchInput.placeholder = "Cari nama, alamat, atau barang...";
+        searchInput.placeholder = "Cari nama donatur, alamat, atau barang...";
       } else {
         btnTabPengeluaran.classList.add("active");
         btnTabPemasukan.classList.remove("active");
@@ -1281,7 +2304,7 @@
     function changePage(delta) {
       currentPage += delta;
       renderActiveTable();
-      document.getElementById("transparansi").scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById("view-keuangan").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function updatePagination(totalFiltered) {
@@ -1289,7 +2312,7 @@
       if (currentPage > totalPages) currentPage = totalPages;
       if (currentPage < 1) currentPage = 1;
 
-      pageInfoEl.textContent = `Halaman ${currentPage} dari ${totalPages}`;
+      pageInfoEl.textContent = `Hal ${currentPage} / ${totalPages}`;
       prevPageBtn.disabled = currentPage <= 1 || totalFiltered === 0;
       nextPageBtn.disabled = currentPage >= totalPages || totalFiltered === 0;
     }
@@ -1332,6 +2355,20 @@
       }
     }
 
+    function updateTargetDonationProgress(totalDonasiMasuk) {
+      const pctRaw = TARGET_RAB_PEMBANGUNAN > 0
+        ? (totalDonasiMasuk / TARGET_RAB_PEMBANGUNAN) * 100
+        : 0;
+      const pctDisplay = pctRaw > 0 && pctRaw < 0.1
+        ? pctRaw.toLocaleString("id-ID", { maximumFractionDigits: 2 }) + "%"
+        : pctRaw.toLocaleString("id-ID", { maximumFractionDigits: 1 }) + "%";
+      const barWidth = Math.min(100, Math.max(0, pctRaw));
+
+      document.getElementById("targetDonasiPct").textContent = pctDisplay;
+      document.getElementById("targetDonasiTerkumpul").textContent = `Masuk: ${formatRupiah(totalDonasiMasuk)}`;
+      document.getElementById("targetDonasiBar").style.width = `${barWidth}%`;
+    }
+
     function updateSummaryCards() {
       let sumUang = 0;
       let sumMatrial = 0;
@@ -1352,10 +2389,23 @@
       const sumOut = pengeluaranRows.reduce((acc, item) => acc + item.jumlahHargaNum, 0);
       const saldo = sumIn - sumOut;
 
-      totalDonasiUangEl.textContent = formatRupiah(sumUang);
-      totalDonasiMatrialEl.textContent = formatRupiah(sumMatrial);
-      totalPengeluaranEl.textContent = formatRupiah(sumOut);
-      sisaSaldoEl.textContent = formatRupiah(saldo);
+      const fUang = formatRupiah(sumUang);
+      const fMatrial = formatRupiah(sumMatrial);
+      const fOut = formatRupiah(sumOut);
+      const fSaldo = formatRupiah(saldo);
+
+      totalDonasiUangEl.textContent = fUang;
+      totalDonasiMatrialEl.textContent = fMatrial;
+      totalPengeluaranEl.textContent = fOut;
+      sisaSaldoEl.textContent = fSaldo;
+
+      document.getElementById("heroUang").textContent = fUang;
+      document.getElementById("heroMatrial").textContent = fMatrial;
+      document.getElementById("heroKeluar").textContent = fOut;
+      document.getElementById("heroSaldo").textContent = fSaldo;
+
+      updateTargetDonationProgress(sumIn);
+
       countPemasukanEl.textContent = pemasukanRows.length;
       countPengeluaranEl.textContent = pengeluaranRows.length;
     }
@@ -1814,6 +2864,10 @@
         renderActiveTable();
         renderKebutuhanTerkini(parseCSV(csvKebutuhan));
         renderProgresPembangunan(parseCSV(csvProgres));
+
+        if (homeDonorInput && homeDonorInput.value.trim()) {
+          renderHomeDonorSearch();
+        }
       } catch (err) {
         statusText.textContent = "Terjadi kesalahan: " + err.message;
         kebutuhanStatusEl.textContent = "Terjadi kesalahan memuat data kebutuhan.";
