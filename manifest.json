@@ -1,0 +1,17 @@
+{
+  "name": "Masjid Al-Barokah Tanjungkerta",
+  "short_name": "Al-Barokah",
+  "description": "Informasi dan progres pembangunan Masjid Al-Barokah Tanjungkerta",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#198754",
+  "icons": [
+    {
+      "assets/logo-masjid.png": "./logo-masjid.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
